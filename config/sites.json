@@ -1,0 +1,9 @@
+{
+  "target_path" : "https://sugardaddy.jp",
+  "login" : "/login",
+  "message" : "/message",
+  "message_board" : "/message?id=$1",
+  "search" : "/search",
+  "profile" : "/profile",
+  "profile_detail" : "/profile?id=$1"
+}
