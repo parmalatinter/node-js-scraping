@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../../partials/header.ejs %>
+</head>
+
+<body>
+
+  <% include ../../partials/nav.ejs %>
+
+<div>
+<table class="table">
+    <thead>
+    <tr>
+        <th>ID<br>ニックネーム<br>性別<br>年齢<br>居住地</th>
+        <th>年収<br>資産<br>職業</th>
+        <th>会員フラグ</th>
+        <th>身長<br>体型</th>
+        <th>飲酒<br>喫煙</th>
+        <th>婚姻状況</th>
+        <th>自己紹介</th>
+        <th>交際タイプ</th>
+        <th>メッセージ人数<br>掲示板投稿数<br>被通報数<br></th>
+        <th>メッセージ送信可</th>
+        <th>メッセージ送信済</th>
+        <th>登録日時<br>作成日時<br>更新日時</th>
+        <th colspan="2"></th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% rows.forEach(function(r) { %>
+    <tr>
+        <td><%= r.name %><br><%= r.id %><br><%= r.age %>才<br><%= r.sex == 1 ? '男性' : '女性' %><br><%= r.location %></td>
+        <td><%= r.salary %><br><%= r.asset %><br><%= r.job %></td>
+        <td><%= r.payment_status %></td>
+        <td><%= r.height %><br><%= r.body %></td>
+        <td><%= r.drinking %><br><%= r.smoking %></td>
+        <td><%= r.marriage %></td>
+        <td><%= r.about %></td>
+        <td><%= r.dating_type %></td>
+        <td><%= r.message_count %><br><%= r.bbs_count  %><br><%= r.bad_reporting_count %></td>
+        <td><input type="checkbox" name="is_enable_send" value="checked" <%= r.is_enable_send? 'checked' : '' %>></td>
+        <td><%= r.created_at %><br><%= r.registered_at %><br><%= r.update_at %></td>
+    </tr>
+    <% }); %>
+    </tbody>
+</table>
