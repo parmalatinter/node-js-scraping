@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../../partials/header.ejs %>
+</head>
+
+<body>
+
+<% include ../../partials/nav.ejs %>
+
+<div class="jumbotron text-center">
+    <div class="container">
+        <a href="/" class="lang-logo">
+            <img src="/lang-logo.png">
+        </a>
+        <h1>DB</h1>
+        <% modal_id = 'modal-backup' %>
+        <button type="button" id="backup_btn" class="btn btn-lg btn-primary"
+                data-toggle="modal"
+                data-target="#<%= modal_id %>">
+            <span class="glyphicon glyphicon-download"></span>バックアップ
+        </button>
+        <% url = '/admin/db/backup' %>
+        <% title = 'バックアップしますか？' %>
+        <% explain = ''%>
+        <% method = 'get'%>
+        <% include ../../partials/modal/comfirm.ejs %>
+
+        <% modal_id = 'modal-restore' %>
+        <button type="button" id="restore_btn" class="btn btn-lg btn-primary"
+                data-toggle="modal"
+                data-target="#<%= modal_id %>">
+            <span class="glyphicon glyphicon-download"></span>レストア
+        </button>
+        <% include ../../partials/modal/restore.ejs %>
+
+        <% modal_id = 'modal-reset' %>
+        <button type="button" id="backup_btn" class="btn btn-lg btn-primary"
+                data-toggle="modal"
+                data-target="#<%= modal_id %>">
+            <span class="glyphicon glyphicon-download"></span>リセット
+        </button>
+        <% url = '/admin/db/reset' %>
+        <% title = 'リセットしますか？' %>
+        <% explain = ''%>
+        <% method = 'get'%>
+        <% include ../../partials/modal/comfirm.ejs %>
+    </div>
+</div>
+<div class="container">
+    <div class="alert alert-info text-center" role="alert">
+        To deploy your own copy, and learn the fundamentals of the Heroku platform, head over to the <a
+                href="https://devcenter.heroku.com/articles/getting-started-with-nodejs" class="alert-link">Getting
+            Started with Node on Heroku</a> tutorial.
+    </div>
+    <% include ../../partials/modal/restore.ejs %>
+</div>
+
+
+</body>
+</html>
