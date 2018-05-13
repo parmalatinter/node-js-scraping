@@ -34,13 +34,11 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                 let search_path = site_config.target_path + site_config.search;
                 await page.goto(search_path, {waitUntil: "domcontentloaded"});
 
+                await exports.delay(1000);
+
                 await page.waitForSelector(".BoxSearchIndex");
 
                 console.log("set search condition");
-                //const search_condition = require("./../../config/search_condition.json");
-                console.log(1);
-
-
                 try {
                     const search_condition = require("./../../config/search_condition.json");
                     await page.select("select[name=age_min]", search_condition.between.age.min[0]);
@@ -57,13 +55,11 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                     return resolve(0);
                 }
 
-                console.log("get url");
                 await exports.delay(1000);
+                console.log("get url");
                 let url = page.url();
 
                 let is_available = false;
-
-                if (await page.$(".BoxPhotoProfile") !== null) is_available = true;
 
                 var page_number = 1;
                 var res = [];
@@ -71,7 +67,8 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
 
                 console.log("start get user ids");
                 let limit = env === 'development' || setting_row.is_debug_mode ? 100 : 100000;
-                while (is_available && page_number < limit) {
+                while (page_number < limit) {
+                    await exports.delay(2000);
                     let ids = await page.evaluate(() =>
                         [...document.querySelectorAll(".BoxPhotoProfile")].map(element => Number(element.getAttribute("userid")))
                     );
@@ -91,8 +88,10 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                         }
                         let profile_path = site_config.target_path + site_config.profile_detail.replace("$1", id);
                         await page.goto(profile_path, {waitUntil: "domcontentloaded"});
+                        await exports.delay(2000);
 
                         try {
+
                             if (!!(await page.$(".title01"))) {
                                 let is_enable_text = await page.evaluate(() => document.querySelector(".title01").innerHTML);
                                 if (is_enable_text === 'エラー') {
