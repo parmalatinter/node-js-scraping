@@ -1,0 +1,29 @@
+<div class="modal fade" id="<%= modal_id %>" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
+                <h4 class="modal-title"><%= title %></h4>
+            </div>
+            <% if (explain) { %>
+            <div class="modal-body">
+                <%= explain %>
+            </div>
+            <% } %>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+                <% if (method == 'post') { %>
+                    <form action="<%= url %>" method="<%= method %>">
+                        <% hiddens.forEach(function(hidden) { %>
+                            <input type="hidden" name="<%= hidden.name %>" value="<%= hidden.value %>">
+                        <% }) %>
+                        <button type="submit" class="btn btn-primary">実行</button>
+                    </form>
+                <% } %>
+                <% if (method === 'get') { %>
+                    <a href="<%= url %>" class="btn btn-primary">実行</a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
