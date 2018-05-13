@@ -17,7 +17,7 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                 const site_config = require("./../../config/sites.json");
                 const page = await browser.newPage();
 
-                await page.goto(site_config.target_path + site_config.login);
+                await page.goto(site_config.target_path + site_config.login, {waitUntil: "domcontentloaded"});
 
                 console.log("start login", my_user);
                 await page.evaluate((my_user) => {
@@ -32,8 +32,8 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                 console.log("start scraping");
 
                 let search_path = site_config.target_path + site_config.search;
-                await page.goto(search_path);
-                await exports.delay(1000);
+                await page.goto(search_path, {waitUntil: "domcontentloaded"});
+
                 await page.waitForSelector(".BoxSearchIndex");
 
                 console.log("set search condition");
@@ -97,7 +97,7 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                             return　resolve(info_count);
                         }
                         let profile_path = site_config.target_path + site_config.profile_detail.replace("$1", id);
-                        await page.goto(profile_path);
+                        await page.goto(profile_path, {waitUntil: "domcontentloaded"});
 
                         if (!!(await page.$(".title01"))) {
                             let is_enable_text = await page.evaluate(() => document.querySelector(".title01").innerHTML);
@@ -208,7 +208,7 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
 
                     console.log("start next");
 
-                    await page.goto(url + "&page=" + page_number);
+                    await page.goto(url + "&page=" + page_number, {waitUntil: "domcontentloaded"});
                     await page.waitForSelector(".BoxSearchIndex");
                     is_available = (await page.$(".BoxPhotoProfile") !== null);
                     res = [];

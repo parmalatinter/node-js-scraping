@@ -4,7 +4,7 @@ exports.delay = function (timeout) {
     });
 };
 
-exports.exec = function (puppeteer, knex, my_user, send_list, setting_row, env) {
+exports.exec = function (puppeteer, knex, my_user, send_obj, setting_row, env) {
     const message_send_status = require('./../../models/status/message_send_status');
     return new Promise(function (resolve, reject) {
         (async (puppeteer, my_user, setting_row, env) => {
@@ -14,48 +14,54 @@ exports.exec = function (puppeteer, knex, my_user, send_list, setting_row, env) 
                 if (!running_type) {
                     resolve(false);
                 }
+                const id = send_obj.id;
                 const site_config = require("./../../config/sites.json");
                 const page = await browser.newPage();
-                await page.goto(site_config.target_path + site_config.login);
+                await page.goto(site_config.target_path + site_config.login, {waitUntil: "domcontentloaded"});
 
                 await page.evaluate((my_user) => {
                     document.querySelector("input[name=email]").value = my_user.email;
                     document.querySelector("input[name=pass]").value = my_user.password;
+                    document.querySelector("input[value=ログイン]").click();
                 }, my_user);
-                await page.click("input[value=ログイン]");
+
+                await page.waitForNavigation();
                 await page.waitForSelector("#TOP");
-                await exports.delay(1000);
 
                 console.log("start message send");
-                let sent_list = [];
-                for (let send_obj of send_list) {
-                    let message_path = site_config.target_path + site_config.message_board.replace("$1", send_obj.id);
-                    await page.goto(message_path);
-                    await exports.delay(1000);
+
+                let message_path = site_config.target_path + site_config.message_board.replace("$1", send_obj.id);
+
+
+                try {
+                    await page.goto(message_path, {waitUntil: "domcontentloaded"});
                     if (!!(await page.$(".title01"))) {
                         let is_enable_text = await page.evaluate(() => document.querySelector(".title01").innerHTML);
                         if (is_enable_text === 'エラー') {
-                            sent_list.push(send_obj);
                             await browser.close();
-                            resolve(sent_list);
+                            resolve(id);
                         }
                     }
-                    await page.waitForSelector("#msg_comment");
-                    if (env === 'production' || !setting_row.is_debug_mode) {
-                        await page.evaluate((my_user) => {
-                            document.querySelector("#msg_comment").value = my_user.send_message;
-                        }, my_user);
-                        await page.click("button[id=add]");
-                        await exports.delay(2000);
-                    }
-                    sent_list.push(send_obj);
+                } catch (e) {
+                    await browser.close();
+                    resolve(id);
+                }
+
+                await page.waitForSelector("#msg_comment");
+                if (env === 'production' || !setting_row.is_debug_mode) {
+                    await page.evaluate((my_user) => {
+                        document.querySelector("#msg_comment").value = my_user.send_message;
+                    }, my_user);
+                    await page.click("button[id=add]");
+                    await exports.delay(2000);
                 }
                 console.log("start logout");
-                await page.goto(site_config.target_path);
+                await page.goto(site_config.target_path, {waitUntil: "domcontentloaded"});
+
                 await page.click("a[class=logout]");
                 await browser.close();
                 console.log("end");
-                resolve(sent_list);
+                resolve(id);
             } catch (e) {
                 console.log(e.stack);
                 await browser.close();

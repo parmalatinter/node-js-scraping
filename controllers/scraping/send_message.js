@@ -15,21 +15,16 @@ exports.exec = function (host_res, knex, puppeteer, setting_row, env) {
                         callback(true);
                         return;
                     }
-                    send_message.exec(puppeteer, knex, user_record, send_list, setting_row, env).then(function (sent_list) {
-                        if (!sent_list.length) callback(false);
-                        async.each(sent_list, function (sent_obj, callback2) {
-                            user.update_sent(knex, sent_obj.id).then(function () {
-                                sent_count++;
-                                callback2();
-                            }, function (e) {
-                                throw e;
-                            });
-                        }, function (e) {
-                            if (e) {
-                                throw e;
-                            }
+                    send_message.exec(puppeteer, knex, user_record, send_list[0], setting_row, env).then(function (id) {
+                        if (!id) callback(false);
+
+                        user.update_sent(knex, id).then(function () {
+                            sent_count++;
                             callback();
+                        }, function (e) {
+                            throw e;
                         });
+
                     }).catch(function (e) {
                         throw e;
                     });
