@@ -1,48 +1,328 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <% include ../../partials/header.ejs %>
+    <% include ../../partials/header.ejs %>
 </head>
 
-<body>
+<body style="background:#532F8C">
 
-  <% include ../../partials/nav.ejs %>
+<% include ../../partials/nav.ejs %>
+<script type="text/javascript" src="/javascripts/user.js"></script>
 
-<div>
-<table class="table">
-    <thead>
-    <tr>
-        <th>ID<br>ニックネーム<br>性別<br>年齢<br>居住地</th>
-        <th>年収<br>資産<br>職業</th>
-        <th>会員フラグ</th>
-        <th>身長<br>体型</th>
-        <th>飲酒<br>喫煙</th>
-        <th>婚姻状況</th>
-        <th>自己紹介</th>
-        <th>交際タイプ</th>
-        <th>メッセージ人数<br>掲示板投稿数<br>被通報数<br></th>
-        <th>メッセージ送信可</th>
-        <th>メッセージ送信済</th>
-        <th>登録日時<br>作成日時<br>更新日時</th>
-        <th colspan="2"></th>
-    </tr>
-    </thead>
+<style>
+    .container.users td, .container.users th {
+        width: 140px;
+    }
 
-    <tbody>
-    <% rows.forEach(function(r) { %>
-    <tr>
-        <td><%= r.name %><br><%= r.id %><br><%= r.age %>才<br><%= r.sex == 1 ? '男性' : '女性' %><br><%= r.location %></td>
-        <td><%= r.salary %><br><%= r.asset %><br><%= r.job %></td>
-        <td><%= r.payment_status %></td>
-        <td><%= r.height %><br><%= r.body %></td>
-        <td><%= r.drinking %><br><%= r.smoking %></td>
-        <td><%= r.marriage %></td>
-        <td><%= r.about %></td>
-        <td><%= r.dating_type %></td>
-        <td><%= r.message_count %><br><%= r.bbs_count  %><br><%= r.bad_reporting_count %></td>
-        <td><input type="checkbox" name="is_enable_send" value="checked" <%= r.is_enable_send? 'checked' : '' %>></td>
-        <td><%= r.created_at %><br><%= r.registered_at %><br><%= r.update_at %></td>
-    </tr>
-    <% }); %>
-    </tbody>
-</table>
+    .container.users td p.collapse[aria-expanded="false"] {
+        display: block;
+        height: 80px !important;
+        overflow: hidden;
+    }
+
+    .container.users td p.collapsing[aria-expanded="false"] {
+        height: 80px !important;
+    }
+
+    .container.users td a.collapsed:after {
+        content: '+もっと見る';
+    }
+
+    .container.users td a:not(.collapsed):after {
+        content: '- 隠す';
+    }
+
+    .container.users .list-group-item {
+        position: relative;
+        display: block;
+        padding: 2px 15px;
+        margin-bottom: -1px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+    }
+
+    .container.users .list-group {
+        padding-left: 0;
+        margin-bottom: inherit;
+    }
+
+    .modal-content.search_condition input.big, .modal-content.search_condition select.big {
+        width: 100%;
+    }
+
+    .modal-dialog {
+        max-width: 650px;
+    }
+</style>
+<div class="container users">
+    <form action="/admin/user" method="post">
+        <!-- Large modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal"
+                data-target="#search_user">検索条件
+        </button>
+        <button class="btn btn-primary" type="submit">
+            検索
+        </button>
+        <button type="button" class="btn btn-primary" data-toggle="modal"
+                data-target="#set_is_enable_send">条件を送信条件に反映
+        </button>
+        <button type="button" class="btn btn-primary" data-toggle="modal"
+                data-target="#un_set_is_enable_send">条件を送信条件から外す
+        </button>
+        <br><br>
+        <div class="panel panel-default">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr style="background: lightgray;">
+                        <th>
+                            <div class="list-group">
+                                <a class="list-group-item list-group-item-info">ニックネーム <input class="form-check-input"
+                                                                                              type="checkbox"
+                                                                                              name="sort[]"
+                                                                                              value="name"
+                                            <%= valid_sort.name == 'name' ? 'checked' : '' %>/></a>
+                                <a class="list-group-item list-group-item-info">ID <input class="form-check-input"
+                                                                                          type="checkbox" name="sort[]"
+                                                                                          value="id"
+                                            <%= valid_sort.name == 'id' ? 'checked' : '' %>/></a>
+                                <a class="list-group-item list-group-item-info">性別 <input class="form-check-input"
+                                                                                          type="checkbox" name="sort[]"
+                                                                                          value="sex"
+                                            <%= valid_sort.name == 'sex' ? 'checked' : '' %>/></a>
+                                <a class="list-group-item list-group-item-info">年齢 <input class="form-check-input"
+                                                                                          type="checkbox" name="sort[]"
+                                                                                          value="age"
+                                            <%= valid_sort.name == 'age' ? 'checked' : '' %>/></a>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="list-group">
+                                <a class="list-group-item list-group-item-info">居住地 <input class="form-check-input"
+                                                                                           type="checkbox" name="sort[]"
+                                                                                           value="location"
+                                            <%= valid_sort.name == 'location' ? 'checked' : '' %>/></a>
+                                <a class="list-group-item list-group-item-info">年収 <input class="form-check-input"
+                                                                                          type="checkbox" name="sort[]"
+                                                                                          value="salary"
+                                            <%= valid_sort.name == 'salary' ? 'checked' : '' %>/></a>
+                                <a class="list-group-item list-group-item-info">資産 <input class="form-check-input"
+                                                                                          type="checkbox" name="sort[]"
+                                                                                          value="asset"
+                                            <%= valid_sort.name == 'asset' ? 'checked' : '' %>/></a>
+                                <a class="list-group-item list-group-item-info">職業 <input class="form-check-input"
+                                                                                          type="checkbox" name="sort[]"
+                                                                                          value="job"
+                                            <%= valid_sort.name == 'job' ? 'checked' : '' %>/></a>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="list-group">
+                                <a class="list-group-item list-group-item-info">身長 <input class="form-check-input"
+                                                                                          type="checkbox" name="sort[]"
+                                                                                          value="height"
+                                            <%= valid_sort.name == 'height' ? 'checked' : '' %>/></a>
+                                <a class="list-group-item list-group-item-info">体型 <input class="form-check-input"
+                                                                                          type="checkbox" name="sort[]"
+                                                                                          value="body"
+                                            <%= valid_sort.name == 'body' ? 'checked' : '' %>/></a>
+                                <a class="list-group-item list-group-item-info">飲酒 <input class="form-check-input"
+                                                                                          type="checkbox" name="sort[]"
+                                                                                          value="drinking"
+                                            <%= valid_sort.name == 'drinking' ? 'checked' : '' %>/></a>
+                                <a class="list-group-item list-group-item-info">喫煙 <input class="form-check-input"
+                                                                                          type="checkbox" name="sort[]"
+                                                                                          value="smoking"
+                                            <%= valid_sort.name == 'smoking' ? 'checked' : '' %>/></a>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="list-group">
+                                <a class="list-group-item list-group-item-info">婚姻状況 <input class="form-check-input"
+                                                                                            type="checkbox"
+                                                                                            name="sort[]"
+                                                                                            value="marriage"
+                                            <%= valid_sort.name == 'marriage' ? 'checked' : '' %>/></a>
+                                <a class="list-group-item list-group-item-info">交際タイプ <input class="form-check-input"
+                                                                                             type="checkbox"
+                                                                                             name="sort[]"
+                                                                                             value="dating_type"
+                                            <%= valid_sort.name == 'dating_type' ? 'checked' : '' %>/></a>
+                                <a class="list-group-item list-group-item-info">会員フラグ <input class="form-check-input"
+                                                                                             type="checkbox"
+                                                                                             name="sort[]"
+                                                                                             value="payment_status"
+                                            <%= valid_sort.name == 'payment_status' ? 'checked' : '' %>/></a>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="list-group">
+                                <a class="list-group-item list-group-item-info">✉️人数 <input class="form-check-input"
+                                                                                            type="checkbox"
+                                                                                            name="sort[]"
+                                                                                            value="message_count"
+                                            <%= valid_sort.name == 'message_count' ? 'checked' : '' %>/></a>
+                                <a class="list-group-item list-group-item-info">✏️投稿数 <input class="form-check-input"
+                                                                                             type="checkbox"
+                                                                                             name="sort[]"
+                                                                                             value="bbs_count"
+                                            <%= valid_sort.name == 'bbs_count' ? 'checked' : '' %>/></a>
+                                <a class="list-group-item list-group-item-info">🚓被通報数 <input class="form-check-input"
+                                                                                              type="checkbox"
+                                                                                              name="sort[]"
+                                                                                              value="bad_reporting_count"
+                                            <%= valid_sort.name == 'bad_reporting_count' ? 'checked' : '' %>/></a>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="list-group">
+                                <a class="list-group-item list-group-item-info">登録日時 <input class="form-check-input"
+                                                                                            type="checkbox"
+                                            <%= valid_sort.name == 'registered_at' ? 'checked' : '' %>
+                                                                                            name="sort[]"
+                                                                                            value="registered_at"/></a>
+                                <a class="list-group-item list-group-item-info">作成日時 <input class="form-check-input"
+                                                                                            type="checkbox"
+                                            <%= valid_sort.name == 'created_at' ? 'checked' : '' %>
+                                                                                            name="sort[]"
+                                                                                            value="created_at"/></a>
+                                <a class="list-group-item list-group-item-info">更新日時 <input class="form-check-input"
+                                                                                            type="checkbox"
+                                            <%= valid_sort.name == 'update_at' ? 'checked' : '' %>
+                                                                                            name="sort[]"
+                                                                                            value="update_at"/></a>
+                            </div>
+                        </th>
+                    </tr>
+                    <tr style="background: lightgray;">
+                        <th>
+                            <div class="list-group">
+                                <a class="list-group-item">画像<br><br></a>
+                            </div>
+                        </th>
+                        <th colspan="4">
+                            <div class="list-group">
+                                <a class="list-group-item">内容<br><br></a>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="list-group">
+                                <a class="list-group-item">
+                                    メッセージ可 <input class="form-check-input" type="checkbox" name="sort[]" value=""/><br>
+                                    メッセージ済 <input class="form-check-input" type="checkbox" name="sort[]" value=""/>
+                                </a>
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <% is_enable_send = false %>
+        <% modal_id = 'search_user' %>
+        <% include ../../partials/modal/user_search.ejs %>
+    </form>
+    <form class="panel panel-default">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tbody>
+                <% rows.forEach(function(r, i) { %>
+                    <tr style="<%= i % 2 ? 'background:#f7f7f9' : '' %>">
+                    <td>
+                        <%= r.name %><br>
+                        <%= r.id %><br>
+                        <%= r.age %>才<br>
+                        <%= r.sex == 1 ? '男性' : '女性' %>
+                    </td>
+                    <td>
+                        <%= r.location %><br>
+                        <%= r.salary != "" ? r.salary : "-" %><br>
+                        <%= r.asset != "" ? r.asset : "-" %><br>
+                        <%= r.job != "" ? r.job : "-" %>
+                    </td>
+                    <td>
+                        <%= r.height ? r.height : "-" %><br>
+                        <%= r.body %><br><%= r.drinking != "" ? r.drinking : "-" %><br>
+                        <%= r.smoking != "" ? r.smoking : "-" %>
+                    </td>
+                    <td><%= r.marriage != "" ? r.marriage : "-" %><br>
+                        <%= r.dating_type != "" ? r.dating_type : "-" %><br>
+                        <% if (r.payment_status === 'PREMIUM') { %>
+                        <span class="label label-danger">👑</span>
+                        <% } else if (r.payment_status === 'DIAMOND') { %>
+                        <span class="label label-danger">💎</span>
+                        <% } else { %>
+                        -
+                        <% } %>
+                    </td>
+                    <td>
+                        ✉️<%= r.message_count %><br>
+                        ✏️<%= r.bbs_count %><br>
+                        🚓<%= r.bad_reporting_count %></td>
+                    <td>
+                        <%= moment(r.created_at).format("YYYY-MM-DD") %><br>
+                        <%= moment(r.registered_at).format("YYYY-MM-DD") %><br>
+                        <% if (r.update_at) { %>
+                        <%= moment(r.update_at).format("YYYY-MM-DD") %>
+                        <% } else { %>
+                        -
+                        <% } %>
+                    </td>
+                </tr>
+                    <tr style="<%= i % 2 ? 'background:#f7f7f9' : '' %>">
+                    <td>
+                        <div style="height: 150px;
+            overflow: hidden;
+            vertical-align: middle;">
+                            <% if (r.is_image) { %>
+                            <img class="img-thumbnail" width="150px" src="/img/user/user_<%= r.id %>.png">
+                            <% } else if(r.sex == 1){ %>
+                            <img class="img-thumbnail" width="150px" src="/img/default_men.png">
+                            <% } else if(r.sex == 2){ %>
+                            <img class="img-thumbnail" width="150px" src="/img/default_women.png">
+                            <% } %>
+                        </div>
+                    </td>
+                    <td colspan="4" width="70%"><p class="collapse" id="collapse<%= i %>"
+                                                   aria-expanded="false"><%= r.about %></p>
+                        <% if (r.about.length > 198) { %>
+                        <a role="button" class="collapsed" data-toggle="collapse" href="#collapse<%= i %>"
+                           aria-expanded="false" aria-controls="collapse<%= i %>">
+                        </a>
+                        <% } %>
+                    </td>
+                    <td colspan="2">
+                        ✉️送信可<input type="checkbox" name="is_enable_send" class="main_is_enable_send" alt="#is_enable_send_<%= r.id %>"
+                                    value="checked" <%= r.is_enable_send ? 'checked' : '' %>><br>
+                        ✉️送信済<input type="checkbox" name="is_sent" value="true" <%= r.is_sent ? 'checked' : '' %>
+                                    disabled>
+                    </td>
+                <tr>
+                <% }); %>
+                </tbody>
+            </table>
+        </div>
+        <% url = '/admin/user'; %>
+        <% include ../../partials/pagination.ejs %>
+    </form>
+    <form action="/admin/user/set_is_enable_send_by_ids" method="post">
+        <% include ../../partials/modal/set_is_enable_send_by_ids.ejs %>
+    </form>
+    <form action="/admin/user/set_is_enable_send" method="post">
+        <% modal_id = 'set_is_enable_send' %>
+        <% is_enable_send = true %>
+        <% include ../../partials/modal/user_search.ejs %>
+    </form>
+    <form action="/admin/user/unset_is_enable_send" method="post">
+        <% modal_id = 'un_set_is_enable_send' %>
+        <% is_enable_send = true %>
+        <% include ../../partials/modal/user_search.ejs %>
+    </form>
+    <br>
+    <button type="button" class="btn btn-primary" data-toggle="modal"
+            data-target="#modal_set_is_enable_send_by_ids">チェックした物を反映
+    </button>
+    <br><br>
+</div>
