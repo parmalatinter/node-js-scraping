@@ -10,6 +10,7 @@ exports.seed = function(knex, Promise) {
               "name" : "としのり",
               "sex" : 1,
               "is_enable_send" : true,
+              "is_image" : false,
               "is_sent" : false
           },
           {
@@ -17,6 +18,7 @@ exports.seed = function(knex, Promise) {
               "name" : "makiko51",
               "sex" : 2,
               "is_enable_send" : true,
+              "is_image" : false,
               "is_sent" : false
           },
       ]);
