@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../../partials/header.ejs %>
+</head>
+
+<body style="background:#532F8C">
+
+<% include ../../partials/nav.ejs %>
+<div class="container users">
+    <form action="/admin/setting/update" method="post">
+        <div class="panel panel-default">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>ヘッドレスモード</th>
+                        <th>デバッグモード</th>
+                        <th>画像必要・不必要</th>
+                        <th>メッセージ送信間隔</th>
+                        <th colspan="1"></th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td>
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                    <%= setting.is_headless_mode ? 'checked' : '' %>
+                                   name="is_headless_mode"
+                                   value="true"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                    <%= setting.is_debug_mode ? 'checked' : '' %>
+                                   name="is_debug_mode"
+                                   value="true"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                    <%= setting.is_need_image ? 'checked' : '' %>
+                                   name="is_need_image"
+                                   value="true"/>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control big" name="message_send_frequency_minute"
+                                   placeholder="分" value="<%= setting.message_send_frequency_minute %>">
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-sm btn-outline">更新</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</div>
