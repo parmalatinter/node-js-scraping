@@ -1,37 +1,36 @@
-var async = require("async");
-exports.exec = function (host_res, knex, puppeteer) {
-    const admin_user = require("./../../models/admin/user");
-    const user_info = require("./../../libs/puppeteer/user_info");
-    const user = require("./../../models/user/user");
-    admin_user.get_list(knex).then(function (user_records) {
-        let sent_count = 0;
-        async.each(user_records, function (user_record, callback) {
-            user_info.exec(puppeteer, knex, user_record).then(function (user_infos) {
-                async.each(user_infos, function (user_info, callback2) {
-                    user.update(knex, user_info).then(function () {
-                        callback2();
-                    }).catch(function (e) {
-                        throw e;
-                    });
-                }, function (e) {
+let async = require("async");
+exports.exec = function (host_res, knex, puppeteer, setting_row, env) {
+    return new Promise(function (resolve, reject) {
+        const admin_user = require("./../../models/admin/user");
+        const user_info = require("./../../libs/puppeteer/user_info");
+        const scraping_user_info_status = require('./../../models/status/scraping_user_info_status');
+        let running_type = scraping_user_info_status.running_type_configs.running;
+        scraping_user_info_status.update_running_type(knex, running_type);
+
+        admin_user.get_enable_list(knex).then(function (user_records) {
+            async.each(user_records, function (user_record, callback) {
+                user_info.exec(puppeteer, knex, user_record, setting_row, env).then(function (info_count) {
+                    callback();
+                    console.log('got infos ' + info_count)
+                }).catch(function (e) {
                     if (e) {
                         throw e;
                     }
-                    sent_count += user_infos.length;
-                    callback();
                 });
-            }).catch(function (e) {
+            }, function (e) {
+                running_type = scraping_user_info_status.running_type_configs.stopping;
+                scraping_user_info_status.update_running_type(knex, running_type);
+                console.log('scraping user info finished');
                 if (e) {
-                    throw e;
+                    reject(e);
                 }
+                resolve(true);
             });
         }, function (e) {
-            if (e) {
-                host_res.render("pages/error", {error: e});
-            }
-            host_res.render("pages/message_sent_result", {sent_count: sent_count});
+            console.log(e);
+            running_type = scraping_user_info_status.running_type_configs.stopping;
+            scraping_user_info_status.update_running_type(knex, running_type);
+            resolve(e)
         });
-    }, function (e) {
-        host_res.render("pages/error", {error: e});
     });
 };
