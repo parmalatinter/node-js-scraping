@@ -18,7 +18,7 @@
  */
 module.exports = (knex) => {
 	return async (query, options) => {
-		const perPage = options.perPage || 10;
+		const perPage = options.perPage || 20;
 		let page = options.page || 1;
 
 		const countQuery = knex.count('* as total').from(query.clone().as('inner'));
@@ -43,9 +43,9 @@ module.exports = (knex) => {
 
 		return {
 			pagination: {
-				total: total,
+				total: Number(total),
 				perPage,
-				currentPage: page,
+				currentPage:  Number(page),
 				lastPage: Math.ceil(total / perPage),
 				from: offset,
 				to: offset + data.length,
