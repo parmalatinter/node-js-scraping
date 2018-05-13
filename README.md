@@ -46,8 +46,14 @@ nodemon will watch the files in the directory in which nodemon was started, and 
 nodemon ./server.js localhost 8080
 
 knex migrate:latest
-migrate:rollback
+knex migrate:rollback
 knex migrate:make create_user
 knex seed:make users_seed knex seed:run
 
 knex seed:run
+
+sudo npm install pg-backup -g --save
+sudo npm install knex-dump --save
+sudo npm i -S sqlite3
+sudo npm install -g gzip --save
+
