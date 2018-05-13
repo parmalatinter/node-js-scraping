@@ -12,7 +12,7 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
 
     return new Promise(function (resolve, reject) {
         (async (puppeteer, knex, my_user, setting_row) => {
-            const browser = await puppeteer.launch({headless: false});
+            const browser = await puppeteer.launch({headless: setting_row.is_headless_mode});
             try {
                 const site_config = require("./../../config/sites.json");
                 const page = await browser.newPage();
