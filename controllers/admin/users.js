@@ -46,7 +46,11 @@ exports.set_is_enable_send = function (req, host_res, knex, is_enable_send) {
     let converted_condition = {...valid_condition};
     converted_condition.standard = validation.convert_selects_condition(valid_condition);
     user.set_is_enable_send(knex, converted_condition, is_enable_send).then(function (res) {
-        req.session.serch_condition.is_enable_send = 'true';
+        if(req.session.serch_condition){
+            req.session.serch_condition.is_enable_send = 'true';
+        }else{
+            req.session.serch_condition = {is_enable_send :'true' };
+        }
         session_message.set_message(req, '更新しました。');
         host_res.redirect('/admin/user');
     }, function (e) {

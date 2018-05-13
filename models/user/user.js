@@ -83,8 +83,7 @@ exports.set_is_enable_send = function (knex, condition, is_enable_send) {
         for (name of Object.keys(condition.like)) {
             query.where('like', `%${ condition.like[name] }%`);
         }
-        query.where(condition.standard)
-            .update({is_enable_send: is_enable_send}).then(function () {
+        query.where(condition.standard).update({is_enable_send: is_enable_send}).then(function () {
             resolve(true);
         })
         .catch(function (err) {
