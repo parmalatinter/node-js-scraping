@@ -1,0 +1,30 @@
+<nav class="center">
+	<h4><%=pagination.total%>人</h4>
+	<ul class="pagination">
+		<% if (pagination.currentPage > 1) { %>
+			<li>
+				<a href="<%= url %>?page=<%=pagination.currentPage-1%>" aria-label="前のページへ">
+					<span aria-hidden="true">«</span>
+				</a>
+			</li>
+		<% } %>
+        <% if (pagination.currentPage > 1) { %>
+            <% for (let i = pagination.currentPage-1; i > 0; i--) { %>
+                <li><a href="<%= url %>?page=<%= pagination.currentPage-i %>"><%= pagination.currentPage-i %></a></li>
+                <% if(i === 1) break %>
+				<% if(i === pagination.currentPage-3) break %>
+            <% } %>
+        <% } %>
+        <% for (let i = pagination.currentPage; i < pagination.lastPage+1; i++) { %>
+            <li class="<%= pagination.currentPage === i ? 'active' : ''%>"><a href="<%= url %>?page=<%= i %>"><%= i %></a></li>
+            <% if(i === pagination.currentPage + 5) break %>
+        <% } %>
+		<% if (pagination.currentPage < pagination.lastPage) { %>
+			<li>
+				<a href="<%= url %>?page=<%=pagination.currentPage+1%>" aria-label="次のページへ">
+					<span aria-hidden="true">»</span>
+				</a>
+			</li>
+		<% } %>
+	</ul>
+</nav>
