@@ -34,12 +34,11 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                 let search_path = site_config.target_path + site_config.search;
                 await page.goto(search_path, {waitUntil: "domcontentloaded"});
 
-                await exports.delay(1000);
-
-                await page.waitForSelector(".BoxSearchIndex");
+                await exports.delay(2000);
 
                 console.log("set search condition");
                 try {
+                    await page.waitForSelector(".BoxSearchIndex");
                     const search_condition = require("./../../config/search_condition.json");
                     await page.select("select[name=age_min]", search_condition.between.age.min[0]);
                     await page.select("select[name=age_max]", search_condition.between.age.max[0]);
@@ -56,8 +55,6 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                 }
 
                 await exports.delay(1000);
-                console.log("get url");
-                let url = page.url();
 
                 let is_available = false;
 
@@ -77,6 +74,9 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                     }).catch(function (error) {
                         throw error
                     });
+
+                    console.log("get url");
+                    let url = page.url();
 
                     console.log("start get user info");
                     for (let id of ids) {
@@ -122,7 +122,6 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                             target_user.age = Number(situation.split("／")[0].replace("歳", "").trim());
                             target_user.location = situation.split("／")[1].trim();
                         }
-
 
                         try {
                             console.log("start get user image");
@@ -211,7 +210,9 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                     console.log("start next");
 
                     await page.goto(url + "&page=" + page_number, {waitUntil: "domcontentloaded"});
+                    await exports.delay(1000);
                     await page.waitForSelector(".BoxSearchIndex");
+
                     is_available = (await page.$(".BoxPhotoProfile") !== null);
                     res = [];
 
