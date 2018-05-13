@@ -1,25 +1,90 @@
-<table class="table">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>名前</th>
-        <th>性別</th>
-        <th>パスワード</th>
-        <th></th>
-        <th colspan="2"></th>
-    </tr>
-    </thead>
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../../partials/header.ejs %>
+</head>
 
-    <tbody>
-    <% rows.forEach(function(r) { %>
-    <tr>
-        <td><%= r.id %></td>
-        <td><%= r.name %></td>
-        <td><%= r.sex %></td>
-        <td><%= r.password %></td>
-        <td><a class="btn btn-sm btn-outline">更新</a></td>
-        <td><a class="btn btn-sm btn-outline">削除</a></td>
-    </tr>
-    <% }); %>
-    </tbody>
-</table>
+<body style="background:#532F8C">
+
+<% include ../../partials/nav.ejs %>
+
+<div class="container users">
+    <button type="button" id="backup_btn" class="btn btn-lg btn-primary"
+            data-toggle="modal"
+            data-target="#insert_admin_user">
+        <span class="glyphicon glyphicon-download"></span>新規追加
+    </button><br><br>
+    <div class="panel panel-default">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>名前</th>
+                    <th>性別</th>
+                    <th>パスワード</th>
+                    <th>送信メッセージ</th>
+                    <th>メモ</th>
+                    <th>️送信可</th>
+                    <th colspan="2"></th>
+                </tr>
+                </thead>
+            </table>
+            <% rows.forEach(function(r) { %>
+            <form action="/admin/admin_user/update" method="post">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td>
+                            <input class="form-control" type="id" name="id" value="<%= r.id %>"/>
+                        </td>
+                        <td>
+                            <input class="form-control" type="email" name="email" value="<%= r.email %>"/>
+                        </td>
+                        <td><input class="form-control" type="text" name="name" value="<%= r.name %>"/></td>
+                        <td>
+                            <select class="form-control" name="sex">
+                                <option value="1" <%= r.sex == 1 ? 'selected' : '' %>>男性</option>
+                                <option value="2" <%= r.sex == 2 ? 'selected' : '' %>>女性</option>
+                            </select>
+                            </select>
+                        </td>
+                        <td><input class="form-control" type="password" name="password" value="<%= r.password %>"/></td>
+                        <td><input class="form-control" type="text" name="memo" value="<%= r.memo %>"/></td>
+                        <td><input class="form-control" type="text" name="send_message" value="<%= r.send_message %>"/>
+                        </td>
+                        <td colspan="2">
+                            ✉️送信可<input type="checkbox" name="is_enable"
+                                        value="true" <%= r.is_enable ? 'checked' : "-" %>/><br>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-sm btn-outline">更新</button>
+                        </td>
+                        <td>
+                            <% modal_id = 'modal-reset' + r.id %>
+                            <button type="button" class="btn btn-sm btn-outline"
+                                    data-toggle="modal"
+                                    data-target="#<%= modal_id %>">
+                                削除
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+            <% }); %>
+        </div>
+    </div>
+</div>
+<% rows.forEach(function(r) { %>
+<% modal_id = 'modal-reset' + r.id %>
+<% url = '/admin/admin_user/delete' %>
+<% title = r.name + 'を削除しますか？' %>
+<% explain = '' %>
+<% method = 'post' %>
+<% hiddens = [{name: 'id', value: r.id}] %>
+<% include ../../partials/modal/comfirm.ejs %>
+<% }); %>
+
+<% include ../../partials/modal/insert_admin_user.ejs %>
