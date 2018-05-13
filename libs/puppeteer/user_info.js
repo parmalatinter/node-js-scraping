@@ -37,35 +37,28 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                 await page.waitForSelector(".BoxSearchIndex");
 
                 console.log("set search condition");
-                const search_condition = require("./../../config/search_condition.json");
+                //const search_condition = require("./../../config/search_condition.json");
                 console.log(1);
-                await page.evaluate((search_condition, my_user) => {
-                    let age_min_element = document.querySelector("select[name=age_min]");
-                    age_min_element.querySelector('option[value="' + search_condition.between.age.min[0] + '"]').selected = true;
-                    let age_max_element = document.querySelector("select[name=age_max]");
-                    age_max_element.querySelector('option[value="' + search_condition.between.age.max[0] + '"]').selected = true;
-                    let my_pref_element = document.querySelector("select[name=my_pref]");
-                    my_pref_element.querySelector('option[value="' + search_condition.selects.location[0] + '"]').selected = true;
-                    if (my_user.sex === 1) {
-                        let my_purpose_element = document.querySelector("select[name=my_purpose]");
-                        my_purpose_element.querySelector('option[value="' + search_condition.selects.dating_type[0] + '"]').selected = true;
-                    } else {
-                        let my_income_element = document.querySelector("select[name=my_income]");
-                        my_income_element.querySelector('option[value="' + search_condition.selects.salary[0] + '"]').selected = true;
-                    }
 
-                    console.log("set search");
-                    const search_btn = document.querySelector("input.btn_pink.search_btn");
-                    if (search_btn) {
-                        search_btn.click();
-                    } else {
-                        return resolve(0);
-                    }
-                }, search_condition, my_user);
 
-                await page.waitForNavigation();
+                try {
+                    const search_condition = require("./../../config/search_condition.json");
+                    await page.select("select[name=age_min]", search_condition.between.age.min[0]);
+                    await page.select("select[name=age_max]", search_condition.between.age.max[0]);
+                    await page.select("select[name=my_pref]", search_condition.selects.location[0]);
+                    if (!!(await page.$("select[name=my_purpose]"))) {
+                        await page.select("select[name=my_purpose]", search_condition.selects.dating_type[0]);
+                    }
+                    if (!!(await page.$("select[name=my_income]"))) {
+                        await page.select("select[name=my_income]", search_condition.selects.salary[0]);
+                    }
+                    await page.click("input.btn_pink.search_btn");
+                } catch (e) {
+                    return resolve(0);
+                }
 
                 console.log("get url");
+                await exports.delay(1000);
                 let url = page.url();
 
                 let is_available = false;
@@ -94,17 +87,22 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                         if (!running_type) {
                             limit = 0;
                             browser.close();
-                            return　resolve(info_count);
+                            return resolve(info_count);
                         }
                         let profile_path = site_config.target_path + site_config.profile_detail.replace("$1", id);
                         await page.goto(profile_path, {waitUntil: "domcontentloaded"});
 
-                        if (!!(await page.$(".title01"))) {
-                            let is_enable_text = await page.evaluate(() => document.querySelector(".title01").innerHTML);
-                            if (is_enable_text === 'エラー') {
-                                continue;
+                        try {
+                            if (!!(await page.$(".title01"))) {
+                                let is_enable_text = await page.evaluate(() => document.querySelector(".title01").innerHTML);
+                                if (is_enable_text === 'エラー') {
+                                    continue;
+                                }
                             }
+                        } catch (e) {
+                            continue;
                         }
+
 
                         let login_text = "";
                         if (my_user.sex === 1) {
@@ -121,8 +119,11 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                         target_user.about = await page.evaluate(() => document.querySelector(".acordion_tree > .BoxGray > p").innerHTML);
                         target_user.name = await page.evaluate(() => document.querySelector(".name > span").innerHTML);
                         let situation = await page.evaluate(() => document.querySelector(".situation > li:nth-child(1)").innerHTML);
-                        target_user.age = Number(situation.split("／")[0].replace("歳", "").trim());
-                        target_user.location = situation.split("／")[1].trim();
+                        if (situation) {
+                            target_user.age = Number(situation.split("／")[0].replace("歳", "").trim());
+                            target_user.location = situation.split("／")[1].trim();
+                        }
+
 
                         try {
                             console.log("start get user image");
@@ -136,7 +137,7 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                                     target_user.is_image = true;
                                 }
                             }
-                        } catch (e){
+                        } catch (e) {
                             console.log("image faild");
                         }
 
@@ -155,8 +156,10 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                                 return lis.map(li => li.textContent)
                             });
                             target_user.registered_at = moment().format("9999-12-31");
-                            target_user.salary = lis[2].split(" ")[1];
-                            target_user.asset = lis[2].split(" ")[3];
+                            if (lis && lis[2]) {
+                                target_user.salary = lis[2].split(" ")[1];
+                                target_user.asset = lis[2].split(" ")[3];
+                            }
                             if (!!(await page.$("img[alt=PREMIUM]"))) {
                                 target_user.payment_status = 'PREMIUM';
                             }
@@ -221,7 +224,7 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                     }
                 }
                 browser.close();
-                return　resolve(info_count);
+                return resolve(info_count);
             } catch (e) {
                 browser.close();
                 console.log(e.stack);
