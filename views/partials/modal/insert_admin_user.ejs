@@ -1,0 +1,60 @@
+<div class="modal fade" id="insert_admin_user" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content search_condition" style="padding: 30px 40px 30px 30px;">
+            <form action="/admin/admin_user/insert" method="post" style="display: inline-block;">
+                <div class="row">
+                    <div class="col-sm-4">Email</div>
+                    <div class="col-sm-8 form-inline" style="padding: 3px;">
+                        <input required type="email" class="form-control big" name="email"
+                               placeholder="Email" value="">
+                    </div>
+                    <div class="col-sm-4">名前</div>
+                    <div class="col-sm-8 form-inline" style="padding: 3px;">
+                        <input required type="text" class="form-control big" name="name"
+                               placeholder="名前" value="">
+                    </div>
+                    <div class="col-sm-4">パスワード</div>
+                    <div class="col-sm-8 form-inline" style="padding: 3px;">
+                        <input required type="password" class="form-control big" name="password"
+                               placeholder="パスワード" value="">
+                    </div>
+                    <div class="col-sm-4">送信メッセージ</div>
+                    <div class="col-sm-8 form-inline" style="padding: 3px;">
+                        <input required type="text" class="form-control big" name="send_message"
+                               placeholder="送信メッセージ" value="">
+                    </div>
+                    <div class="col-sm-4">メモ</div>
+                    <div class="col-sm-8 form-inline" style="padding: 3px;">
+                        <input required type="text" class="form-control big" name="memo"
+                               placeholder="メモ" value="">
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-sm-4">メッセージ送信可</div>
+                            <div class="col-sm-8 form-inline" style="padding: 3px;">
+                                <select class="form-control big" name="is_enable" id="is_enable>">
+                                    <option value="true">可</option>
+                                    <option value="false">不可</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-sm-4">性別</div>
+                            <div class="col-sm-8 form-inline" style="padding: 3px;">
+                                <select class="form-control big" name="sex" id="sex">
+                                    <option value="1">男性</option>
+                                    <option value="2">女性</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center" style="padding: 30px;">
+                    <button type="submit" class="btn btn-success">送信</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

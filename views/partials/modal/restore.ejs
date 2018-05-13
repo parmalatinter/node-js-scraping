@@ -1,0 +1,33 @@
+<div class="modal fade" id="<%= modal_id %>" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content search_condition" style="padding: 30px 40px 30px 30px;">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>日付</th>
+                    <th>ファイル名</th>
+                    <th colspan="2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <% backup_list.forEach(function(r, i) { %>
+                <tr>
+                    <td><%= r.date_str %></td>
+                    <td><%= r.file_name %></td>
+                    <td>
+                        <form action="/admin/db/restore" method="get" style="display: inline-block;">
+                            <input type="hidden" name="file_name" value="<%= r.file_name %>">
+                            <button type="submit" class="btn btn-sm btn-outline">レストア</button>
+                        </form>
+                        <form action="/admin/db/delete_backup" method="get" style="display: inline-block;">
+                            <input type="hidden" name="file_name" value="<%= r.file_name %>">
+                            <button type="submit" class="btn btn-sm btn-outline">削除</button>
+                        </form>
+                    </td>
+                </tr>
+                <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
