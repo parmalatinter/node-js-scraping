@@ -1,0 +1,43 @@
+.container.users td, .container.users th {
+    width: 140px;
+}
+
+.container.users td p.collapse[aria-expanded="false"] {
+    display: block;
+    height: 80px !important;
+    overflow: hidden;
+}
+
+.container.users td p.collapsing[aria-expanded="false"] {
+    height: 80px !important;
+}
+
+.container.users td a.collapsed:after {
+    content: '+もっと見る';
+}
+
+.container.users td a:not(.collapsed):after {
+    content: '- 隠す';
+}
+
+.container.users .list-group-item {
+    position: relative;
+    display: block;
+    padding: 2px 15px;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.container.users .list-group {
+    padding-left: 0;
+    margin-bottom: inherit;
+}
+
+.modal-content.search_condition input.big, .modal-content.search_condition select.big {
+    width: 100%;
+}
+
+.modal-dialog {
+    max-width: 650px;
+}
