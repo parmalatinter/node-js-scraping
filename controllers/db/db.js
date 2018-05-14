@@ -10,21 +10,19 @@ exports.backup = function (req, host_res) {
         req.app.locals.render(req, host_res, 'pages/error', {error: e});
     });
 };
-
-exports.backup_list = function (req, host_res) {
-    const dir = './seeds/dump';
-    const fs = require('fs');
-    const moment = require('moment');
-
-    let backup_list = [];
-    fs.readdir(dir, (err, files) => {
-        for(let file_name of files){
-            const timestamp = file_name.replace('dump.', '');
-            const date_str = moment.unix(timestamp).format("YYYY年MM月DD日 HH:mm:ssZ");
-            backup_list.push({date_str: date_str, file_name : file_name});
-        }
-        req.app.locals.render(req, host_res, 'pages/admin/db', {backup_list: backup_list.reverse()});
+exports.csv = function (knex, req, host_res) {
+    db.csv(knex, req).then(function (result) {
+        session_message.set_message(req, 'バックアップしました。');
+        host_res.redirect('/admin/db');
+    }, function (e) {
+        req.app.locals.render(req, host_res, 'pages/error', {error: e});
     });
+};
+
+exports.backup_list = async function (req, host_res) {
+    let backup_list = await db.backup_list();
+    let csv_list = await db.csv_list();
+    req.app.locals.render(req, host_res, 'pages/admin/db', {backup_list: backup_list, csv_list: csv_list});
 };
 
 exports.delete_backup = function (req, host_res) {

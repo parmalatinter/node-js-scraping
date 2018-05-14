@@ -47,25 +47,32 @@ exports.delete = function (req) {
     });
 };
 
-exports.csv = function (knex) {
+exports.csv = function (knex, req) {
+    const search_condition = require('./../../config/search_condition.json');
+    const moment = require("moment");
+    const createCsvWriter = require('csv-writer').createObjectCsvWriter;
     return new Promise(function (resolve, reject) {
-        const fs = require('fs');
-        const pg = require('pg');
-        const copyFrom = require('pg-copy-streams').from;
-        async.each(tables, function (table, callback) {
-            pg.connect(function (err, client, done) {
-                let stream = client.query(copyFrom(`COPY my_table FROM ${table} STDIN`));
-                let fileStream = fs.createReadStream(`${table}.csv`);
-                fileStream.on('error', done);
-                stream.on('error', done);
-                stream.on('end', done);
-                fileStream.pipe(stream);
+
+        knex.select('*').from('users').then(function (rows) {
+            rows.forEach(function (row) {
+                row.registered_at = moment(row.registered_at).format("YYYY-MM-DD");
+                row.created_at = moment(row.created_at).format("YYYY-MM-DD");
+                row.update_at = moment(row.update_at).format("YYYY-MM-DD");
             });
-        }, function (err) {
-            if (err) {
-                reject(err);
-            }
-            resolve(true)
+            let headers = [];
+            Object.keys(search_condition.titles).forEach(function (key) {
+                headers.push({id: key, title: search_condition.titles[key]})
+            });
+            const csvWriter = createCsvWriter({
+                path: req.app.locals.dirname + "/public/csv/users_" + moment().unix() + ".csv",
+                header: headers
+            });
+            csvWriter.writeRecords(rows)
+                .then(() => {
+                    resolve(true)
+                });
+        }).catch(function (err) {
+            reject(err);
         });
     });
 };
@@ -153,6 +160,42 @@ exports.stop_db = function () {
                 reject(err)
             }
             resolve(true)
+        });
+    });
+};
+
+exports.backup_list = function () {
+    return new Promise(function (resolve, reject) {
+        const dir = './seeds/dump';
+        const fs = require('fs');
+        const moment = require('moment');
+
+        let backup_list = [];
+        fs.readdir(dir, (err, files) => {
+            for (let file_name of files) {
+                const timestamp = file_name.replace('dump.', '');
+                const date_str = moment.unix(timestamp).format("YYYY年MM月DD日 HH:mm:ssZ");
+                backup_list.push({date_str: date_str, file_name: file_name});
+            }
+            resolve(backup_list.reverse())
+        });
+    });
+};
+
+exports.csv_list = function () {
+    return new Promise(function (resolve, reject) {
+        const dir = './public/csv';
+        const fs = require('fs');
+        const moment = require('moment');
+
+        let csv_list = [];
+        fs.readdir(dir, (err, files) => {
+            for (let file_name of files) {
+                const timestamp = file_name.replace('users_', '').replace('.csv', '');
+                const date_str = moment.unix(timestamp).format("YYYY年MM月DD日 HH:mm:ssZ");
+                csv_list.push({date_str: date_str, file_name: file_name});
+            }
+            resolve(csv_list.reverse())
         });
     });
 };

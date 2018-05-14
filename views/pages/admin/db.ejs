@@ -45,6 +45,14 @@
         <% explain = ''%>
         <% method = 'get'%>
         <% include ../../partials/modal/comfirm.ejs %>
+
+        <% modal_id = 'modal-csv' %>
+        <button type="button" id="csv_btn" class="btn btn-lg btn-primary"
+                data-toggle="modal"
+                data-target="#<%= modal_id %>">
+            <span class="glyphicon glyphicon-download"></span>CSV
+        </button>
+        <% include ../../partials/modal/csv.ejs %>
     </div>
 </div>
 <div class="container">

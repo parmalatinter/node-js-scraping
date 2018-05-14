@@ -312,9 +312,9 @@
     "registered_at": ""
   },
   "titles": {
+    "id": "ID",
     "sex": "性別",
-    "age_min": "年齢下限",
-    "age_max": "年齢上限",
+    "age": "年齢",
     "message_count": "メッセージ人数",
     "bbs_count": "掲示板投稿数",
     "bad_reporting_count": "被通報数",
