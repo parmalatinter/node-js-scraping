@@ -129,48 +129,9 @@ db_status.get(knex).then(function (res) {
         })
         .get('/message/send', function (req, host_res) {
             let send_message = require('./controllers/scraping/send_message');
-            const message_send_status = require('./models/status/message_send_status');
-            const async = require("async");
-            const delay = function (timeout) {
-                return new Promise(function (resolve) {
-                    setTimeout(resolve, timeout);
-                });
-            };
-            setting.get_frequency_minute(knex).then(function (minute) {
-                setting.get(knex).then(function (setting_row) {
-                    let running_type = message_send_status.running_type_configs.running;
-                    message_send_status.update_running_type(knex, running_type).then(function () {
-                        async.whilst(function () {
-                                return running_type === message_send_status.running_type_configs.running
-                            },
-                            function (next) {
-                                message_send_status.get_running_type(knex).then(function (res) {
-                                    running_type = res;
-                                });
-                                send_message.exec(host_res, knex, puppeteer, setting_row, env).then(function (res) {
-                                    if (!res) {
-                                        running_type = message_send_status.running_type_configs.stopping;
-                                        message_send_status.update_running_type(knex, running_type);
-                                        req.app.locals.render(req, host_res, 'pages/error', {error: e});
-                                    }
-                                    const sec =  1000;
-                                    delay(minute * 60 * sec).then(function () {
-                                        next();
-                                    })
-                                }).catch(function (e) {
-                                    throw e;
-                                });
-                            },
-                            function (e) {
-                                throw e;
-                            });
-                    }).catch(function (e) {
-                        throw e;
-                    });
-                }).catch(function (e) {
-                    req.app.locals.render(req, host_res, 'pages/error', {error: e});
-                });
-            })
+            send_message.start(host_res, knex, puppeteer, setting_row, env).catch(err => {
+                console.log(err);
+            });
         })
         .get('/message/stop', function (req, host_res) {
             let status = require('./controllers/ajax/status/status');
