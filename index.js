@@ -119,9 +119,7 @@ db_status.get(knex).then(function (res) {
         })
         .get('/scraping/start', function (req, host_res) {
             const users_info = require('./controllers/scraping/users_info');
-            setting.get(knex).then(function (setting_row) {
-                users_info.exec(host_res, knex, puppeteer, setting_row, env);
-            })
+            users_info.exec(host_res, knex, puppeteer, env);
         })
         .get('/scraping/stop', function (req, host_res) {
             const status = require('./controllers/ajax/status/status');

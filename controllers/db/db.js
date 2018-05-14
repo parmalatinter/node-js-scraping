@@ -1,8 +1,8 @@
 const session_message = require('./../../libs/express/session_message');
 const output_error = require('./../error/error');
+const db = require('../../libs/db/db');
 
 exports.backup = function (req, host_res) {
-    const db = require('../../libs/db/db');
     db.dump(req).then(function (result) {
         session_message.set_message(req, 'バックアップしました。');
         host_res.redirect('/admin/db');
@@ -28,7 +28,6 @@ exports.backup_list = function (req, host_res) {
 };
 
 exports.delete_backup = function (req, host_res) {
-    const db = require('../../libs/db/db');
     db.delete(req).then(function (result) {
         session_message.set_message(req, '削除しました。');
         host_res.redirect('/admin/db');
@@ -38,7 +37,6 @@ exports.delete_backup = function (req, host_res) {
 };
 
 exports.reset = function (knex, req, host_res, env) {
-    const db = require('./../../libs/db/db');
     db.drop(knex).then(function () {
         db.create(env).then(function () {
             db.init(env).then(function () {
@@ -58,7 +56,6 @@ exports.reset = function (knex, req, host_res, env) {
 };
 
 exports.restore = function (req, host_res) {
-    const db = require('../../libs/db/db');
     db.restore(req).then(function (result) {
         session_message.set_message(req, 'レストアしました。');
         host_res.redirect('/admin/db');
