@@ -56,4 +56,9 @@ sudo npm install pg-backup -g --save
 sudo npm install knex-dump --save
 sudo npm i -S sqlite3
 sudo npm install -g gzip --save
+sudo npm instal pg-copy-streams
 
+pg_ctl -D /usr/local/var/postgres start
+
+npm start --env development
+npm start --env production
