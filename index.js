@@ -150,10 +150,11 @@ db_status.get(knex).then(function (res) {
 }).catch(function (res) {
     if (res.err) {
         const shell = require("./controllers/shell/init");
-        shell.exec(config, env).then(function () {
+        shell.db_init(config, env).then(function () {
             console.log(`データベースを初期化しました。 npm start --env ${env} を実施してください`);
         }).catch(function (e) {
-            console.log(e)
+            shell.db_restart();
+            console.log(`データベース起動しました。 npm start --env ${env} を実施してください`);
         });
     }
 });

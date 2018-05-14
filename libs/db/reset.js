@@ -25,6 +25,30 @@ exports.create_db = async function (config) {
     });
 };
 
+exports.csv = function (knex) {
+    return new Promise(function (resolve, reject) {
+        const fs = require('fs');
+        const pg = require('pg');
+        const copyFrom = require('pg-copy-streams').from;
+        async.each(tables, function (table, callback) {
+            pg.connect(function(err, client, done) {
+                let stream = client.query(copyFrom(`COPY my_table FROM ${table} STDIN`));
+                let fileStream = fs.createReadStream(`${table}.csv`);
+                fileStream.on('error', done);
+                stream.on('error', done);
+                stream.on('end', done);
+                fileStream.pipe(stream);
+            });
+        }, function (err) {
+            if (err) {
+                reject(err);
+            }
+            resolve(true)
+        });
+    });
+};
+
+
 exports.drop = function (knex) {
     return new Promise(function (resolve, reject) {
         async.each(tables, function (table, callback) {
@@ -61,3 +85,28 @@ exports.init = function (env) {
         });
     });
 };
+
+exports.start_db = function () {
+    return new Promise(function (resolve, reject) {
+        shell_exec(`pg_ctl -D /usr/local/var/postgres start`, function(err, stdout, stderr){
+            if(err){
+                reject(err)
+            }
+            resolve(true)
+        });
+    });
+};
+
+exports.stop_db = function () {
+    return new Promise(function (resolve, reject) {
+        shell_exec(`pg_ctl -D /usr/local/var/postgres stop`, function(err, stdout, stderr){
+            if(err){
+                reject(err)
+            }
+            resolve(true)
+        });
+    });
+};
+
+
+
