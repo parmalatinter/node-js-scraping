@@ -1,6 +1,6 @@
-let async = require("async");
 exports.exec = function (host_res, knex, puppeteer, setting_row, env) {
     return new Promise(function (resolve, reject) {
+        const async = require("async");
         const admin_user = require("./../../models/admin/user");
         const user_info = require("./../../libs/puppeteer/user_info");
         const scraping_user_info_status = require('./../../models/status/scraping_user_info_status');
