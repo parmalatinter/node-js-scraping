@@ -6,7 +6,6 @@ const puppeteer = require('puppeteer');
 
 const env = process.env.NODE_ENV || 'development';
 const config = require('./knexfile.js')[env];
-const setting = require("./models/setting/setting");
 const db_status = require("./models/db/status");
 const render = require("./libs/express/render");
 const bodyParser = require('body-parser');
@@ -92,6 +91,10 @@ db_status.get(knex).then(function (res) {
         .get('/admin/db/backup', function (req, host_res) {
             const db = require('./controllers/db/db');
             db.backup(req, host_res);
+        })
+        .get('/admin/db/csv', function (req, host_res) {
+            const db = require('./controllers/db/db');
+            db.csv(knex, req, host_res);
         })
         .get('/admin/db/restore', function (req, host_res) {
             const db = require('./controllers/db/db');
