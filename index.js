@@ -13,7 +13,7 @@ knex = require('knex')(db_config);
 
 db_status.get(knex).then(function () {
     let app = express();
-    app.use(bodyParser.urlencoded());
+    app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
     app.use(express.static('public'));
     app.use(session({
