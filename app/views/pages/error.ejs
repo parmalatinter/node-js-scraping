@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <% include ../partials/header.ejs %>
+    <% include ../partials/header.ejs %>
 </head>
 
 <body>
 
-  <% include ../partials/nav.ejs %>
+<% include ../partials/nav.ejs %>
 
 <div class="jumbotron text-center">
-  <div class="container">
-    <a href="/" class="lang-logo">
-      <img src="/lang-logo.png">
-    </a>
-    <h1><%= error.message %></h1>
-    <p><%= error.error %></p>
-    <p><%= error.stack %></p>
-  </div>
+    <div class="container">
+        <a href="/" class="lang-logo">
+            <img src="/lang-logo.png">
+        </a>
+        <% if (locals.message) { %>
+        <h1><%= message %></h1>
+        <% } %>
+        <% if (locals.error) { %>
+        <p><%= error %></p>
+        <% } %>
+        <% if (locals.stack) { %>
+        <p><%= stack %></p>
+        <% } %>
+    </div>
 </div>
 
 

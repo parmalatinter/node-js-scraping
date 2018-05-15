@@ -3,7 +3,7 @@ const async = require('async');
 
 exports.dump = function (req) {
     const moment = require("moment");
-    const dump_path = req.app.locals.dirname + '/seeds/dump/dump.' + moment().unix();
+    const dump_path = req.app.locals.dirname + '/app/db/seeds/dump/dump.' + moment().unix();
     return new Promise(function (resolve, reject) {
         exec('pg_dump  -C -U postgres scraping ' + '> ' + dump_path, function (err, stdout, stderr) {
             if (err) {
@@ -19,7 +19,7 @@ exports.restore = function (req) {
     if (req.query.file_name) {
         file_name = req.query.file_name;
     }
-    const dump_path = req.app.locals.dirname + '/seeds/dump/' + file_name;
+    const dump_path = req.app.locals.dirname + '/app/db/seeds/dump/' + file_name;
     return new Promise(function (resolve, reject) {
         console.log('pg_dump -Fc -U postgres scraping ' + '> ' + dump_path);
         exec('pg_dump -Fc -U postgres scraping ' + '> ' + dump_path, function (err, stdout, stderr) {
@@ -37,7 +37,7 @@ exports.delete_backup = function (req) {
         file_name = req.query.file_name;
     }
     return new Promise(function (resolve, reject) {
-        const dir = './app/seeds/dump/';
+        const dir = './app/db/seeds/dump/';
         const fs = require('fs');
 
         fs.unlink(dir + file_name, (err, res) => {
