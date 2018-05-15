@@ -51,9 +51,8 @@
                             </select>
                         </td>
                         <td  class="medium"><input class="form-control" type="password" name="password" value="<%= r.password %>"/></td>
-                        <td class="big"><input class="form-control" type="text" name="memo" value="<%= r.memo %>"/></td>
-                        <td class="big"><input class="form-control" type="text" name="send_message" value="<%= r.send_message %>"/>
-                        </td>
+                        <td class="big"><textarea rows="3" class="form-control" type="text" name="memo" value="<%= r.memo %>"></textarea></td>
+                        <td class="big"><textarea rows="3" class="form-control" type="text" name="send_message" value="<%= r.send_message %>"></textarea></td>
                         <td class="medium">
                             ✉️送信可<input type="checkbox" name="is_enable"
                                         value="true" <%= r.is_enable ? 'checked' : "-" %>/><br>
