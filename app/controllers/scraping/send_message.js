@@ -1,6 +1,7 @@
 const async = require("async");
 const message_send_status = require('../../models/status/message_send_status');
 const user = require('../../models/user/user');
+const session_message = require('../../libs/express/session_message');
 
 exports.start = function (req, puppeteer, knex, my_user, send_obj, setting_row, env) {
     const send_message = require('../../libs/puppeteer/send_message');
@@ -33,14 +34,15 @@ exports.start = function (req, puppeteer, knex, my_user, send_obj, setting_row, 
                 if (e) {
                     reject(e);
                 }
-                resolve(true)
+                resolve(true);
+                session_message.set_message(req, '送信完了');
             }
         );
     });
 };
 
 
-exports.exec = function (req, host_res, knex, puppeteer, env) {
+exports.exec = function (req, knex, puppeteer, env) {
     (async (req, host_res, knex, puppeteer, env) => {
         const setting = require("../../models/setting/setting");
         const setting_row = await setting.get(knex);
@@ -60,13 +62,15 @@ exports.exec = function (req, host_res, knex, puppeteer, env) {
                     throw e;
                 });
             }, function (e) {
+                if(e){
+                    session_message.set_error_message(req, e, 'メッセージ送信エラー');
+                }else{
+                    session_message.set_message(req, 'メッセージ送信エラー');
+                }
                 console.log('message_send finished');
                 running_type = message_send_status.running_type_configs.stopping;
                 message_send_status.update_running_type(knex, running_type);
-                if (e) {
-                    throw(e);
-                }
             });
         })
-    })(req, host_res, knex, puppeteer, env);
+    })(req, knex, puppeteer, env);
 };

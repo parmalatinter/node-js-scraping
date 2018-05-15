@@ -109,7 +109,7 @@ db_status.get(knex).then(function () {
         })
         .post('/ajax/get_status', function (req, host_res) {
             const status = require('./app/controllers/ajax/status/status');
-            status.get_running_type(knex, host_res);
+            status.get_running_info(req, knex, host_res);
         })
         .post('/ajax/user/get_info_all_count', function (req, host_res) {
             const user = require('./app/controllers/ajax/user/user');
@@ -121,7 +121,7 @@ db_status.get(knex).then(function () {
         })
         .get('/scraping/start', function (req, host_res) {
             const users_info = require('./app/controllers/scraping/users_info');
-            users_info.exec(host_res, knex, puppeteer, env);
+            users_info.exec(req, knex, puppeteer, env);
         })
         .get('/scraping/stop', function (req, host_res) {
             const status = require('./app/controllers/ajax/status/status');
@@ -129,7 +129,7 @@ db_status.get(knex).then(function () {
         })
         .get('/message/send', function (req, host_res) {
             const send_message = require('./app/controllers/scraping/send_message');
-            send_message.exec(req, host_res, knex, puppeteer, env);
+            send_message.exec(req, knex, puppeteer, env);
         })
         .get('/message/stop', function (req, host_res) {
             const status = require('./app/controllers/ajax/status/status');
