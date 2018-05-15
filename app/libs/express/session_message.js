@@ -9,9 +9,9 @@ exports.set_error_message = function (req, error, message) {
 
 exports.get_messages = function (req) {
     let res = {
-        message: req.session.message.message
-        error: req.session.message.error,
-        error_message: req.session.message.error_message
+        message: req.session.message,
+        error: req.session.error,
+        error_message: req.session.error_message
     };
     req.session.message = '';
     req.session.error_message = '';

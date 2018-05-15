@@ -3,7 +3,7 @@ const admin_user = require("../../models/admin/user");
 const user_info = require("../../libs/puppeteer/user_info");
 const scraping_user_info_status = require('../../models/status/scraping_user_info_status');
 const setting = require("../../models/setting/setting");
-const session_message = require('../../../libs/express/session_message');
+const session_message = require('../../libs/express/session_message');
 
 exports.exec = function (req, knex, puppeteer, env) {
     (async (req, knex, puppeteer, env) => {
