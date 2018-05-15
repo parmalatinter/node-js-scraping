@@ -105,7 +105,12 @@ let get_status = function () {
             $("#message_send_btn").text('メッセージ送信開始');
             $("#message_send_btn").removeAttr('disabled');
         }
-
+        if(res.message){
+            show_modal_message(res.message);
+        }
+        if(res.error){
+            show_modal_error(res.message, res.error, res.stack);
+        }
     }).fail(function (xhr, status, error) {
         console.log(xhr, status, error);
     });
