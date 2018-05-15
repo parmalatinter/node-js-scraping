@@ -25,6 +25,7 @@ let set_event_uncheck = function () {
             input.val('desc');
             $(this).html('逆順にする');
         }
+        $('#user_form').submit();
     });
 };
 

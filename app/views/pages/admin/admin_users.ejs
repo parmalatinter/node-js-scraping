@@ -19,15 +19,15 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Email</th>
-                    <th>名前</th>
-                    <th>性別</th>
-                    <th>パスワード</th>
-                    <th>送信メッセージ</th>
-                    <th>メモ</th>
-                    <th>送信可</th>
-                    <th colspan="2"></th>
+                    <th class="small">ID</th>
+                    <th class="medium">Email</th>
+                    <th class="medium">名前</th>
+                    <th class="medium">性別</th>
+                    <th class="medium">パスワード</th>
+                    <th class="big">送信メッセージ</th>
+                    <th class="big">メモ</th>
+                    <th class="medium">送信可</th>
+                    <th></th>
                 </tr>
                 </thead>
             </table>
@@ -36,32 +36,30 @@
                 <table class="table">
                     <tbody>
                     <tr>
-                        <td>
+                        <td class="small">
                             <input class="form-control" type="id" name="id" value="<%= r.id %>"/>
                         </td>
-                        <td>
+                        <td  class="medium">
                             <input class="form-control" type="email" name="email" value="<%= r.email %>"/>
                         </td>
-                        <td><input class="form-control" type="text" name="name" value="<%= r.name %>"/></td>
-                        <td>
+                        <td  class="medium"><input class="form-control" type="text" name="name" value="<%= r.name %>"/></td>
+                        <td  class="medium">
                             <select class="form-control" name="sex">
                                 <option value="1" <%= r.sex == 1 ? 'selected' : '' %>>男性</option>
                                 <option value="2" <%= r.sex == 2 ? 'selected' : '' %>>女性</option>
                             </select>
                             </select>
                         </td>
-                        <td><input class="form-control" type="password" name="password" value="<%= r.password %>"/></td>
-                        <td><input class="form-control" type="text" name="memo" value="<%= r.memo %>"/></td>
-                        <td><input class="form-control" type="text" name="send_message" value="<%= r.send_message %>"/>
+                        <td  class="medium"><input class="form-control" type="password" name="password" value="<%= r.password %>"/></td>
+                        <td class="big"><input class="form-control" type="text" name="memo" value="<%= r.memo %>"/></td>
+                        <td class="big"><input class="form-control" type="text" name="send_message" value="<%= r.send_message %>"/>
                         </td>
-                        <td colspan="2">
+                        <td class="medium">
                             ✉️送信可<input type="checkbox" name="is_enable"
                                         value="true" <%= r.is_enable ? 'checked' : "-" %>/><br>
                         </td>
                         <td>
                             <button type="submit" class="btn btn-sm btn-outline">更新</button>
-                        </td>
-                        <td>
                             <% modal_id = 'modal-reset' + r.id %>
                             <button type="button" class="btn btn-sm btn-outline"
                                     data-toggle="modal"
