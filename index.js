@@ -1,25 +1,21 @@
 const express = require('express');
 const path = require('path');
 const PORT = process.env.PORT || 5000;
-
-const puppeteer = require('puppeteer');
-
 const env = process.env.NODE_ENV || 'development';
-const config = require('./knexfile.js')[env];
-const db_status = require("./models/db/status");
-const render = require("./libs/express/render");
+const puppeteer = require('puppeteer');
+const db_config = require('./app/db/config.js')[env];
+const db_status = require("./app/models/db/status");
+const render = require("./app/libs/express/render");
 const bodyParser = require('body-parser');
-const session = require('express-session'); // 追加
+const session = require('express-session');
 
-knex = require('knex')(config);
+knex = require('knex')(db_config);
 
-db_status.get(knex).then(function (res) {
-
-    console.log(res);
+db_status.get(knex).then(function () {
     let app = express();
     app.use(bodyParser.urlencoded());
-
     app.use(bodyParser.json());
+    app.use(express.static('public'));
     app.use(session({
         secret: 'scraping-awesome',
         resave: false,
@@ -41,110 +37,105 @@ db_status.get(knex).then(function (res) {
             req.app.locals.render(req, host_res, 'pages/index', {contents: [], home_url: '', name: 'test'});
         })
         .post('/admin/user', function (req, host_res) {
-            const users = require('./controllers/admin/users');
+            const users = require('./app/controllers/admin/users');
             users.exec(req, host_res, knex);
         })
         .get('/admin/user', function (req, host_res) {
-            const users = require('./controllers/admin/users');
+            const users = require('./app/controllers/admin/users');
             users.exec(req, host_res, knex);
         })
         .post('/admin/user/set_is_enable_send', function (req, host_res) {
-            const users = require('./controllers/admin/users');
+            const users = require('./app/controllers/admin/users');
             users.set_is_enable_send(req, host_res, knex, true);
         })
         .post('/admin/user/unset_is_enable_send', function (req, host_res) {
-            const users = require('./controllers/admin/users');
+            const users = require('./app/controllers/admin/users');
             users.set_is_enable_send(req, host_res, knex, false);
         })
         .post('/admin/user/set_is_enable_send_by_ids', function (req, host_res) {
-            const users = require('./controllers/admin/users');
+            const users = require('./app/controllers/admin/users');
             users.set_is_enable_send_by_ids(req, host_res, knex);
         })
         .get('/admin/admin_user', function (req, host_res) {
-            const users = require('./controllers/admin/admin_users');
+            const users = require('./app/controllers/admin/admin_users');
             users.exec(req, host_res, knex, null);
         })
         .post('/admin/admin_user/insert', function (req, host_res) {
-            const users = require('./controllers/admin/admin_users');
+            const users = require('./app/controllers/admin/admin_users');
             users.insert(req, host_res, knex, null);
         })
         .post('/admin/admin_user/delete', function (req, host_res) {
-            const users = require('./controllers/admin/admin_users');
+            const users = require('./app/controllers/admin/admin_users');
             users.delete(req, host_res, knex, null);
         })
         .post('/admin/admin_user/update', function (req, host_res) {
-            const users = require('./controllers/admin/admin_users');
+            const users = require('./app/controllers/admin/admin_users');
             users.update(req, host_res, knex, null);
         })
         .get('/admin/setting', function (req, host_res) {
-            const setting = require('./controllers/admin/setting');
+            const setting = require('./app/controllers/admin/setting');
             setting.exec(req, host_res, knex, null);
         })
         .post('/admin/setting/update', function (req, host_res) {
-            const setting = require('./controllers/admin/setting');
+            const setting = require('./app/controllers/admin/setting');
             setting.update(req, host_res, knex);
         })
         .get('/admin/db', function (req, host_res) {
-            const db = require('./controllers/db/db');
+            const db = require('./app/controllers/db/db');
             db.backup_list(req, host_res);
         })
         .get('/admin/db/backup', function (req, host_res) {
-            const db = require('./controllers/db/db');
+            const db = require('./app/controllers/db/db');
             db.backup(req, host_res);
         })
         .get('/admin/db/csv', function (req, host_res) {
-            const db = require('./controllers/db/db');
+            const db = require('./app/controllers/db/db');
             db.csv(knex, req, host_res);
         })
         .get('/admin/db/restore', function (req, host_res) {
-            const db = require('./controllers/db/db');
+            const db = require('./app/controllers/db/db');
             db.restore(req, host_res);
         })
         .get('/admin/db/delete_backup', function (req, host_res) {
-            const db = require('./controllers/db/db');
+            const db = require('./app/controllers/db/db');
             db.delete_backup(req, host_res);
         })
         .get('/admin/db/reset', function (req, host_res) {
-            const db = require('./controllers/db/db');
+            const db = require('./app/controllers/db/db');
             db.reset(knex, req, host_res, env);
         })
         .post('/ajax/get_status', function (req, host_res) {
-            const status = require('./controllers/ajax/status/status');
+            const status = require('./app/controllers/ajax/status/status');
             status.get_running_type(knex, host_res);
         })
         .post('/ajax/user/get_info_all_count', function (req, host_res) {
-            const user = require('./controllers/ajax/user/user');
+            const user = require('./app/controllers/ajax/user/user');
             user.get_info_all_count(knex, host_res);
         })
         .post('/ajax/user/get_send_all_count', function (req, host_res) {
-            const user = require('./controllers/ajax/user/user');
+            const user = require('./app/controllers/ajax/user/user');
             user.get_send_all_count(knex, host_res);
         })
         .get('/scraping/start', function (req, host_res) {
-            const users_info = require('./controllers/scraping/users_info');
+            const users_info = require('./app/controllers/scraping/users_info');
             users_info.exec(host_res, knex, puppeteer, env);
         })
         .get('/scraping/stop', function (req, host_res) {
-            const status = require('./controllers/ajax/status/status');
+            const status = require('./app/controllers/ajax/status/status');
             status.stop_info_running(knex, host_res);
         })
         .get('/message/send', function (req, host_res) {
-            const send_message = require('./controllers/scraping/send_message');
+            const send_message = require('./app/controllers/scraping/send_message');
             send_message.exec(req, host_res, knex, puppeteer, env);
         })
         .get('/message/stop', function (req, host_res) {
-            const status = require('./controllers/ajax/status/status');
+            const status = require('./app/controllers/ajax/status/status');
             status.stop_send_running(knex, host_res);
         })
         .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 }).catch(function (res) {
     if (res.err) {
-        const shell = require("./controllers/shell/init");
-        shell.db_init(config, env).then(function () {
-            console.log(`データベースを初期化しました。 npm start --env ${env} を実施してください`);
-        }).catch(function (e) {
-            shell.db_restart();
-            console.log(`データベース起動しました。 npm start --env ${env} を実施してください`);
-        });
+        const shell = require("./app/controllers/shell/init");
+        shell.db_init(config, env);
     }
 });
