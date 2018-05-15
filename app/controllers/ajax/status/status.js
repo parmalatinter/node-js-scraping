@@ -7,9 +7,9 @@ exports.get_running_info = function (req, knex, host_res) {
     let res = {
         message_send_status : {running_type : 0},
         scraping_user_info_status : {running_type : 0},
-        message: messages.message.message,
-        error: messages.message.error,
-        error_message: messages.message.error_message
+        message: messages.message,
+        error: messages.error,
+        error_message: messages.error_message
     };
     message_send_status.get_running_type(knex).then(function (message_send_status) {
         res.message_send_status = message_send_status;
