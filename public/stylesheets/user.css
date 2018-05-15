@@ -46,7 +46,7 @@
     display: none;
 }
 
-#set_is_enable_send .modal-mask {
+#set_is_enable_send .modal-mask, #un_set_is_enable_send .modal-mask{
     display: inline-block;
     width: 100%;
     height: 900px;

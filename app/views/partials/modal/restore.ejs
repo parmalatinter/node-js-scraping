@@ -17,11 +17,11 @@
                     <td>
                         <form action="/admin/db/restore" method="get" style="display: inline-block;">
                             <input type="hidden" name="file_name" value="<%= r.file_name %>">
-                            <button type="submit" class="btn btn-sm btn-outline">レストア</button>
+                            <button type="submit" class="btn btn btn-primary">レストア</button>
                         </form>
                         <form action="/admin/db/delete_backup" method="get" style="display: inline-block;">
                             <input type="hidden" name="file_name" value="<%= r.file_name %>">
-                            <button type="submit" class="btn btn-sm btn-outline">削除</button>
+                            <button type="submit" class="btn btn btn-danger">削除</button>
                         </form>
                     </td>
                 </tr>

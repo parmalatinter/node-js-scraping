@@ -19,10 +19,10 @@
                     <td><%= r.file_name %></td>
                     <td>
                         <a href="/cdv/<%= r.file_name %>" download type="submit"
-                           class="btn btn-sm btn-outline">ダウンロード</a>
+                           class="btn btn btn-primary">ダウンロード</a>
                         <form action="/admin/db/delete_csv" method="get" style="display: inline-block;">
                             <input type="hidden" name="file_name" value="<%= r.file_name %>">
-                            <button type="submit" class="btn btn-sm btn-outline">削除</button>
+                            <button type="submit" class="btn btn btn-danger">削除</button>
                         </form>
                     </td>
                 </tr>
