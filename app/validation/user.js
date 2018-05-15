@@ -29,6 +29,31 @@ exports.search = function (condition) {
                 result.standard[name] = false;
             }
         }
+        for (let name of Object.keys(search_condition.between)) {
+            if (!Array.isArray(condition[name]) || !condition[name]){
+                condition[name] = [search_condition.between[name].min[0], search_condition.between[name].max[0]]
+                continue;
+            }
+            if(condition[name].length < 1){
+                condition[name] = [search_condition.between[name].min[0], search_condition.between[name].max[0]]
+                continue;
+            }
+            let res = [];
+            condition[name].forEach(function (value , key) {
+
+                 if (validator.isInt(value)){
+                    res.push( value);
+                }else{
+                     if(!key){
+                         res.push(search_condition.between[name].min[0]);
+                     }else {
+                         res.push(search_condition.between[name].max[0]);
+                     }
+
+                }
+            });
+            result.between[name] = res;
+        }
         for (let name of Object.keys(search_condition.texts)) {
             if (!condition[name]) continue;
             if (!validator.isLength(condition[name], {min:0, max: undefined})) return false;

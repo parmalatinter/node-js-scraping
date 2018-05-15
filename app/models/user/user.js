@@ -66,6 +66,9 @@ exports.get_list = function (knex, per_page, page, condition, sort) {
         for (name of Object.keys(condition.like)) {
             query = query.where(name, 'like', `%${ condition.like[name] }%`);
         }
+        for (name of Object.keys(condition.between)) {
+            query = query.whereBetween(name, [ condition.between[name][0], condition.between[name][1]]);
+        }
         paginator(knex)(query, {perPage: per_page, page: page}).then(function (res) {
             resolve({data: res.data, pagination: res.pagination});
         }).catch(function (err) {

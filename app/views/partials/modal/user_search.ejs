@@ -31,9 +31,12 @@
                         <div class="col-sm-4"><%= title %>下限</div>
                         <div class="col-sm-8 form-inline" style="padding: 3px;">
                             <select class="form-control big" name="<%= name %>"
-                                    id="<%= name %>" <%= (is_enable_send) ? 'readonly' : '' %>>
+                                    id="min_<%= name %>" <%= (is_enable_send) ? 'readonly' : '' %>>
                                 <% min_select.forEach(function(value, key){ %>
-                                <option value="min_<%- name %>" <%= valid_condition.standard[name] == key ? 'selected' : '' %>><%- value ? value : "-" %></option>
+                                <option value="<%- value %>"
+                                        <%= valid_condition.between[name][0] == key ? 'selected' : '' %>
+                                        <%= (is_enable_send) ? 'readonly' : '' %>
+                                ><%- value != min_select[0]? value : "-" %></option>
                                 <% }); %>
                             </select>
                         </div>
@@ -41,13 +44,14 @@
                     <div class="form-group">
                         <div class="col-sm-4"><%= title %>上限</div>
                         <div class="col-sm-8 form-inline" style="padding: 3px;">
-                            <select class="form-control big" name="<%= name %>" id="<%= name %>"
+                            <select class="form-control big" name="<%= name %>"
+                                    id="max_<%= name %>"
                                     <%= (is_enable_send) ? 'readonly' : '' %>>
                                 <% max_select.forEach(function(value, key){ %>
-                                <option value="max_<%- name %>"
-                                        <%= valid_condition.standard[name] == key ? 'selected' : '' %>
+                                <option value="<%- value %>"
+                                        <%= valid_condition.between[name][1] == key ? 'selected' : '' %>
                                         <%= (is_enable_send) ? 'readonly' : '' %>
-                                ><%- value ? value : "-" %></option>
+                                ><%- value != max_select[0]? value : "-" %></option>
                                 <% }); %>
                             </select>
                         </div>
