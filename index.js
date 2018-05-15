@@ -13,25 +13,24 @@ knex = require('knex')(db_config);
 
 db_status.get(knex).then(function () {
     let app = express();
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(bodyParser.json());
-    app.use(express.static('public'));
-    app.use(session({
-        secret: 'scraping-awesome',
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            maxAge: 30 * 60 * 1000
-        }
-    }));
-
     app.locals.dirname = path.join(__dirname, '');
     app.locals.render = render.exec;
     app.locals.knex = knex;
 
     app
+        .use(bodyParser.urlencoded({ extended: true }))
+        .use(bodyParser.json())
+        .use(express.static('public'))
+        .use(session({
+            secret: 'scraping-awesome',
+            resave: false,
+            saveUninitialized: false,
+            cookie: {
+                maxAge: 30 * 60 * 1000
+            }
+        }))
         .use(express.static(path.join(__dirname, 'public')))
-        .set('views', path.join(__dirname, 'views'))
+        .set('views', path.join(__dirname, './app/views'))
         .set('view engine', 'ejs')
         .get('/', function (req, host_res) {
             req.app.locals.render(req, host_res, 'pages/index', {contents: [], home_url: '', name: 'test'});
