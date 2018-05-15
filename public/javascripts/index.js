@@ -46,7 +46,7 @@ let start_send_message = function () {
     $.ajax({
         async: true,
         url: '/message/send',
-        type: 'stop',
+        type: 'post',
         dataType: 'html',
         timeout: 1000
     }).done(function (data, textStatus, jqXHR) {

@@ -17,13 +17,17 @@ exports.start = function (req, puppeteer, knex, my_user, send_obj, setting_row, 
                 message_send_status.get_running_type(knex).then(function (res) {
                     running_type = res;
                 });
-                send_message.exec(puppeteer, knex, my_user, send_obj, setting_row, env).then(function (res) {
-                    if (!res) {
+                send_message.exec(puppeteer, knex, my_user, send_obj, setting_row, env).then(function (id) {
+                    if (!id) {
                         running_type = message_send_status.running_type_configs.stopping;
                         message_send_status.update_running_type(knex, running_type);
                     } else {
-                        send_message.delay(setting_row.message_send_frequency_minute * 60 * sec).then(function () {
-                            next();
+                        user.update_sent(knex, id).then(function () {
+                            send_message.delay(setting_row.message_send_frequency_minute * 60 * sec).then(function () {
+                                next();
+                            });
+                        }).catch(function (e) {
+                            throw e;
                         });
                     }
                 }).catch(function (e) {
@@ -34,7 +38,7 @@ exports.start = function (req, puppeteer, knex, my_user, send_obj, setting_row, 
                 if (e) {
                     reject(e);
                 }
-                resolve(true);
+                resolve(true);session_message
                 session_message.set_message(req, '送信完了');
             }
         );
@@ -43,12 +47,12 @@ exports.start = function (req, puppeteer, knex, my_user, send_obj, setting_row, 
 
 
 exports.exec = function (req, knex, puppeteer, env) {
-    (async (req, host_res, knex, puppeteer, env) => {
+    (async (req, knex, puppeteer, env) => {
         const setting = require("../../models/setting/setting");
         const setting_row = await setting.get(knex);
         const admin_user = require('../../models/admin/user');
         let running_type = message_send_status.running_type_configs.running;
-        const user_records = await admin_user.get_enable_list(knex)
+        const user_records = await admin_user.get_enable_list(knex);
 
         async.each(user_records, function (user_record, callback) {
                 let target_sex = user_record.sex === 1 ? 2 : 1;
