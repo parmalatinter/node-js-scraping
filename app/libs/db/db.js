@@ -31,13 +31,31 @@ exports.restore = function (req) {
     });
 };
 
-exports.delete = function (req) {
+exports.delete_backup = function (req) {
     let file_name = '';
     if (req.query.file_name) {
         file_name = req.query.file_name;
     }
     return new Promise(function (resolve, reject) {
         const dir = './seeds/dump/';
+        const fs = require('fs');
+
+        fs.unlink(dir + file_name, (err, res) => {
+            if (err) {
+                reject(err)
+            }
+            resolve(true)
+        });
+    });
+};
+
+exports.delete_csv = function (req) {
+    let file_name = '';
+    if (req.query.file_name) {
+        file_name = req.query.file_name;
+    }
+    return new Promise(function (resolve, reject) {
+        const dir = './public/csv/';
         const fs = require('fs');
 
         fs.unlink(dir + file_name, (err, res) => {

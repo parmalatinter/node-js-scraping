@@ -26,7 +26,17 @@ exports.backup_list = async function (req, host_res) {
 };
 
 exports.delete_backup = function (req, host_res) {
-    db.delete(req).then(function (result) {
+    db.delete_backup(req).then(function (result) {
+        session_message.set_message(req, '削除しました。');
+        host_res.redirect('/admin/db');
+    }, function (e) {
+        req
+            .app.locals.render(req, host_res, 'pages/error', {error: e});
+    });
+};
+
+exports.delete_csv. = function (req, host_res) {
+    db.delete_csv(req).then(function (result) {
         session_message.set_message(req, '削除しました。');
         host_res.redirect('/admin/db');
     }, function (e) {

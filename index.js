@@ -99,6 +99,10 @@ db_status.get(knex).then(function () {
             const db = require('./app/controllers/db/db');
             db.delete_backup(req, host_res);
         })
+        .get('/admin/db/delete_csv', function (req, host_res) {
+            const db = require('./app/controllers/db/db');
+            db.delete_csv(req, host_res);
+        })
         .get('/admin/db/reset', function (req, host_res) {
             const db = require('./app/controllers/db/db');
             db.reset(knex, req, host_res, env);

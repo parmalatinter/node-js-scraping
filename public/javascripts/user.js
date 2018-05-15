@@ -16,7 +16,15 @@ var set_event_uncheck = function () {
             $($(this).attr('alt')).val('false_' + id);
         }
     });
-
+    $("#order_button").on("click", function(){
+        if($("#order").val('desc')){
+            $("#order").val('asc');
+            $(this).html('逆順をやめる');
+        }else{
+            $("#order").val('desc');
+            $(this).html('逆順にする');
+        }
+    });
 };
 
 $(function () {
