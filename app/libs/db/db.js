@@ -37,7 +37,7 @@ exports.delete_backup = function (req) {
         file_name = req.query.file_name;
     }
     return new Promise(function (resolve, reject) {
-        const dir = './seeds/dump/';
+        const dir = './app/seeds/dump/';
         const fs = require('fs');
 
         fs.unlink(dir + file_name, (err, res) => {
@@ -55,7 +55,7 @@ exports.delete_csv = function (req) {
         file_name = req.query.file_name;
     }
     return new Promise(function (resolve, reject) {
-        const dir = './public/csv/';
+        const dir = './app/public/csv/';
         const fs = require('fs');
 
         fs.unlink(dir + file_name, (err, res) => {
@@ -184,12 +184,13 @@ exports.stop_db = function () {
 
 exports.backup_list = function () {
     return new Promise(function (resolve, reject) {
-        const dir = './seeds/dump';
+        const dir = './app/db/seeds/dump';
         const fs = require('fs');
         const moment = require('moment');
 
         let backup_list = [];
         fs.readdir(dir, (err, files) => {
+            if(!files) resolve([]);
             for (let file_name of files) {
                 const timestamp = file_name.replace('dump.', '');
                 const date_str = moment.unix(timestamp).format("YYYY年MM月DD日 HH:mm:ssZ");
@@ -208,6 +209,7 @@ exports.csv_list = function () {
 
         let csv_list = [];
         fs.readdir(dir, (err, files) => {
+            if(!files) resolve([]);
             for (let file_name of files) {
                 const timestamp = file_name.replace('users_', '').replace('.csv', '');
                 const date_str = moment.unix(timestamp).format("YYYY年MM月DD日 HH:mm:ssZ");
