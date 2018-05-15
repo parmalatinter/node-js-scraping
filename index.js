@@ -119,19 +119,19 @@ db_status.get(knex).then(function () {
             const user = require('./app/controllers/ajax/user/user');
             user.get_send_all_count(knex, host_res);
         })
-        .get('/scraping/start', function (req, host_res) {
+        .post('/scraping/start', function (req, host_res) {
             const users_info = require('./app/controllers/scraping/users_info');
             users_info.exec(req, knex, puppeteer, env);
         })
-        .get('/scraping/stop', function (req, host_res) {
+        .post('/scraping/stop', function (req, host_res) {
             const status = require('./app/controllers/ajax/status/status');
             status.stop_info_running(knex, host_res);
         })
-        .get('/message/send', function (req, host_res) {
+        .post('/message/send', function (req, host_res) {
             const send_message = require('./app/controllers/scraping/send_message');
             send_message.exec(req, knex, puppeteer, env);
         })
-        .get('/message/stop', function (req, host_res) {
+        .post('/message/stop', function (req, host_res) {
             const status = require('./app/controllers/ajax/status/status');
             status.stop_send_running(knex, host_res);
         })
