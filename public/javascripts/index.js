@@ -3,7 +3,7 @@ let start_scraping = function () {
     $.ajax({
         async: true,
         url: '/scraping/start',
-        type: 'get',
+        type: 'post',
         dataType: 'html',
         timeout: 1000
     }).done(function (data, textStatus, jqXHR) {
@@ -25,7 +25,7 @@ let stop_scraping = function () {
     $.ajax({
         async: true,
         url: '/scraping/stop',
-        type: 'get',
+        type: 'post',
         dataType: 'html',
         timeout: 1000
     }).done(function (data, textStatus, jqXHR) {
@@ -46,7 +46,7 @@ let start_send_message = function () {
     $.ajax({
         async: true,
         url: '/message/send',
-        type: 'get',
+        type: 'stop',
         dataType: 'html',
         timeout: 1000
     }).done(function (data, textStatus, jqXHR) {
@@ -69,7 +69,7 @@ let stop_send_message = function () {
     $.ajax({
         async: true,
         url: '/message/stop',
-        type: 'get',
+        type: 'post',
         dataType: 'html',
         timeout: 1000
     }).done(function (data, textStatus, jqXHR) {
