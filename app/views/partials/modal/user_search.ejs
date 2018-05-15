@@ -19,12 +19,12 @@
             <% }); %>
 
             <% Object.keys(search_condition.between).forEach(function(name) { %>
-            <% var min_select = search_condition.selects[name]['min'] %>
-            <% var max_select = search_condition.selects[name]['max'] %>
+            <% var min_select = search_condition.between[name]['min'] %>
+            <% var max_select = search_condition.between[name]['max'] %>
             <% var title = search_condition.titles[name] %>
             <div class="row">
                 <div class="form-group">
-                    <div class="col-sm-4"><%= title %></div>
+                    <div class="col-sm-4"><%= title %>下限</div>
                     <div class="col-sm-8 form-inline" style="padding: 3px;">
                         <select class="form-control big" name="<%= name %>" id="<%= name %>">
                             <% min_select.forEach(function(value, key){ %>
@@ -32,6 +32,9 @@
                             <% }); %>
                         </select>
                     </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4"><%= title %>上限</div>
                     <div class="col-sm-8 form-inline" style="padding: 3px;">
                         <select class="form-control big" name="<%= name %>" id="<%= name %>">
                             <% max_select.forEach(function(value, key){ %>

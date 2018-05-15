@@ -1,4 +1,4 @@
-var set_event_uncheck = function () {
+let set_event_uncheck = function () {
     $(".list-group-item.list-group-item-info input[type=checkbox]").on("click", function(){
         $('.list-group-item.list-group-item-info input[type=checkbox]').prop('checked', false);
         $(this).prop('checked', true);
@@ -8,8 +8,8 @@ var set_event_uncheck = function () {
         $(this).prop('checked', true);
     });
     $(".main_is_enable_send[type=checkbox]").on("click", function(){
-        var alt_text = $(this).attr('alt');
-        var id = alt_text.replace('#is_enable_send_', '');
+        let alt_text = $(this).attr('alt');
+        let id = alt_text.replace('#is_enable_send_', '');
         if($(this).prop('checked')){
             $($(this).attr('alt')).val('true_' + id);
         }else{
@@ -17,11 +17,12 @@ var set_event_uncheck = function () {
         }
     });
     $("#order_button").on("click", function(){
-        if($("#order").val('desc')){
-            $("#order").val('asc');
+        let input = $("#order");
+        if(input.val() === 'desc'){
+            input.val('asc');
             $(this).html('逆順をやめる');
         }else{
-            $("#order").val('desc');
+            input.val('desc');
             $(this).html('逆順にする');
         }
     });

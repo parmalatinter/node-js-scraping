@@ -1,4 +1,4 @@
-var start_scraping = function () {
+let start_scraping = function () {
     $("#scraping_btn").text('スクレイピング中');
     $.ajax({
         async: true,
@@ -19,7 +19,7 @@ var start_scraping = function () {
         get_status();
     });
 };
-var stop_scraping = function () {
+let stop_scraping = function () {
     $("#scraping_btn").text('スクレイピング停止中');
     $("#scraping_btn").attr({'disabled': true});
     $.ajax({
@@ -41,7 +41,7 @@ var stop_scraping = function () {
         get_status();
     });
 };
-var start_send_message = function () {
+let start_send_message = function () {
     $("#message_send_btn").text('メッセージ送信中');
     $.ajax({
         async: true,
@@ -63,7 +63,7 @@ var start_send_message = function () {
     });
 };
 
-var stop_send_message = function () {
+let stop_send_message = function () {
     $("#message_send_btn").text('メッセージ送信 停止中');
     $("#message_send_btn").attr({'disabled': true});
     $.ajax({
@@ -86,7 +86,7 @@ var stop_send_message = function () {
     });
 };
 
-var get_status = function () {
+let get_status = function () {
     $.ajax({
         async: false,
         url: '/ajax/get_status',
@@ -111,7 +111,7 @@ var get_status = function () {
     });
 };
 
-var get_info_all_count = function () {
+let get_info_all_count = function () {
     $.ajax({
         async: false,
         url: '/ajax/user/get_info_all_count',
@@ -129,7 +129,7 @@ var get_info_all_count = function () {
     });
 };
 
-var get_send_all_count = function () {
+let get_send_all_count = function () {
     $.ajax({
         async: false,
         url: '/ajax/user/get_send_all_count',
