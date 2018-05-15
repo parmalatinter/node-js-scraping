@@ -2,14 +2,14 @@ const validator = require('validator');
 const search_condition = require('../config/search_condition.json');
 
 exports.search = function (condition) {
-        let result = {standard : {}, like: {}, between :{}};
+        let result = {standard : {}, like: {}, between :{}, number : {}};
         if(!condition){
             return result;
         }
         for (let name of Object.keys(search_condition.numbers)) {
             if (!condition[name]) continue;
             if (!validator.isAlphanumeric(condition[name])) return false;
-            if (condition[name] !== '0') result.standard[name] = Number(condition[name]);
+            if (condition[name] !== '0') result.number[name] = Number(condition[name]);
         }
         for (let name of Object.keys(search_condition.selects)) {
             if (!condition[name]) continue;
@@ -71,7 +71,12 @@ exports.convert_selects_condition = function (condition) {
     for (let name of Object.keys(search_condition.selects)) {
         if (condition.standard[name]) {
             let index = Number(condition.standard[name]);
-            condition.standard[name] = search_condition.selects[name][index];
+            if(name !== 'sex'){
+                condition.standard[name] = search_condition.selects[name][index];
+            }else{
+                condition.standard[name] = index;
+            }
+
         }
     }
     return condition.standard;

@@ -49,7 +49,7 @@
                                     <%= (is_enable_send) ? 'readonly' : '' %>>
                                 <% max_select.forEach(function(value, key){ %>
                                 <option value="<%- value %>"
-                                        <%= valid_condition.between[name][1] == value ? 'selected' : '' %>
+                                        <%= valid_condition.between[name][1] == key ? 'selected' : '' %>
                                         <%= (is_enable_send) ? 'readonly' : '' %>
                                 ><%- value != max_select[0]? value : "-" %></option>
                                 <% }); %>
@@ -73,11 +73,11 @@
                 <% Object.keys(search_condition.numbers).forEach(function(name) { %>
                 <% var title = search_condition.titles[name] %>
                 <div class="row">
-                    <div class="col-sm-4"><%= title %></div>
+                    <div class="col-sm-4"><%= title %>(指定以上)</div>
                     <div class="col-sm-8 form-inline" style="padding: 3px;">
                         <input type="number" class="form-control big"
                                name="<%= name %>" <%= (is_enable_send) ? 'readonly' : '' %>
-                               placeholder="<%= title %>" value="<%= valid_condition.standard[name] %>">
+                               placeholder="<%= title %>" value="<%= valid_condition.number[name] %>">
                     </div>
                 </div>
                 <% }); %>
@@ -111,9 +111,7 @@
                 <div class="text-center" style="padding: 30px;">
                     <button type="submit" class="btn btn-success">送信</button>
                     <% if (!is_enable_send) { %>
-                    <form id="user_form" action="/admin/user/reset_search_condition" method="post">
-                        <button type="submit" class="btn">検索条件リセット</button>
-                    </form>
+                        <a href="/admin/user/reset_search_condition" class="btn">検索条件リセット</a>
                     <% } %>
                 </div>
             </div>
