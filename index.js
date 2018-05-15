@@ -73,7 +73,7 @@ db_status.get(knex).then(function () {
         })
         .get('/admin/setting', function (req, host_res) {
             const setting = require('./app/controllers/admin/setting');
-            setting.exec(req, host_res, knex, null);
+            setting.exec(req, host_res);
         })
         .post('/admin/setting/update', function (req, host_res) {
             const setting = require('./app/controllers/admin/setting');

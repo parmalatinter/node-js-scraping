@@ -1,13 +1,5 @@
-exports.exec = function (req, host_res, knex, res) {
-    const setting = require('../../models/setting/setting');
-    setting.get(knex, {}).then(function (setting) {
-        req.app.locals.render(req, host_res, 'pages/admin/setting', {
-            setting: setting,
-            res: res
-        });
-    }, function (e) {
-        host_res.render('pages/error', {error: e});
-    });
+exports.exec = function (req, host_res) {
+    req.app.locals.render(req, host_res, 'pages/admin/setting', {});
 };
 
 exports.update = function (req, host_res, knex) {
