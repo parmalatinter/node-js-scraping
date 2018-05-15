@@ -1,85 +1,97 @@
-<div class="modal fade" id="<%=modal_id%>" role="dialog" aria-labelledby="modalLabel">
+<div class="modal fade" id="<%= modal_id %>" role="dialog" aria-labelledby="modalLabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content search_condition" style="padding: 30px 40px 30px 30px;">
-            <% Object.keys(search_condition.selects).forEach(function(name) { %>
-            <% var select = search_condition.selects[name] %>
-            <% var title = search_condition.titles[name] %>
-            <div class="row">
-                <div class="form-group">
-                    <div class="col-sm-4"><%= title %></div>
-                    <div class="col-sm-8 form-inline" style="padding: 3px;">
-                        <select class="form-control big" name="<%= name %>" id="<%= name %>">
-                            <% select.forEach(function(value, key){ %>
-                            <option value="<%- key %>" <%= valid_condition.standard[name] == key ? 'selected' : '' %>><%- value ? value : "-" %></option>
-                            <% }); %>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <% }); %>
-
-            <% Object.keys(search_condition.between).forEach(function(name) { %>
-            <% var min_select = search_condition.between[name]['min'] %>
-            <% var max_select = search_condition.between[name]['max'] %>
-            <% var title = search_condition.titles[name] %>
-            <div class="row">
-                <div class="form-group">
-                    <div class="col-sm-4"><%= title %>下限</div>
-                    <div class="col-sm-8 form-inline" style="padding: 3px;">
-                        <select class="form-control big" name="<%= name %>" id="<%= name %>">
-                            <% min_select.forEach(function(value, key){ %>
-                            <option value="min_<%- name %>" <%= valid_condition.standard[name] == key ? 'selected' : '' %>><%- value ? value : "-" %></option>
-                            <% }); %>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-4"><%= title %>上限</div>
-                    <div class="col-sm-8 form-inline" style="padding: 3px;">
-                        <select class="form-control big" name="<%= name %>" id="<%= name %>">
-                            <% max_select.forEach(function(value, key){ %>
-                            <option value="max_<%- name %>" <%= valid_condition.standard[name] == key ? 'selected' : '' %>><%- value ? value : "-" %></option>
-                            <% }); %>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <% }); %>
-
-            <% Object.keys(search_condition.texts).forEach(function(name) { %>
-            <% var title = search_condition.titles[name] %>
-            <div class="row">
-                <div class="col-sm-4"><%= title %></div>
-                <div class="col-sm-8 form-inline" style="padding: 3px;">
-                    <input type="text" class="form-control big" name="<%= name %>"
-                           placeholder="<%= title %>" value="<%= valid_condition.like[name] %>">
-                </div>
-            </div>
-            <% }); %>
-            <% Object.keys(search_condition.numbers).forEach(function(name) { %>
-            <% var title = search_condition.titles[name] %>
-            <div class="row">
-                <div class="col-sm-4"><%= title %></div>
-                <div class="col-sm-8 form-inline" style="padding: 3px;">
-                    <input type="number" class="form-control big" name="<%= name %>"
-                           placeholder="<%= title %>" value="<%= valid_condition.standard[name] %>">
-                </div>
-            </div>
-            <% }); %>
-            <% Object.keys(search_condition.checks).forEach(function(name) { %>
-            <% var title = search_condition.titles[name] %>
-                <% if ((!is_enable_send && name === 'is_enable_send')
-                        || name !== 'is_enable_send' ) { %>
-                    <div class="row">
+            <div class="modal-mask"></div>
+            <div class="modal-body">
+                <% Object.keys(search_condition.selects).forEach(function(name) { %>
+                <% var select = search_condition.selects[name] %>
+                <% var title = search_condition.titles[name] %>
+                <div class="row">
+                    <div class="form-group">
                         <div class="col-sm-4"><%= title %></div>
-                        <div class="col-sm-8 form-inline form-check">
-                            <input class="form-check-input" type="checkbox" value="true"
-                                   name="<%= name %>" <%= valid_condition.standard[name] == 'true' ? 'checked' : '' %>/>
+                        <div class="col-sm-8 form-inline" style="padding: 3px;">
+                            <select class="form-control big" name="<%= name %>"
+                                    id="<%= name %>"
+                                    <%= (is_enable_send) ? 'readonly' : '' %>>
+                                <% select.forEach(function(value, key){ %>
+                                <option value="<%- key %>" <%= valid_condition.standard[name] == key ? 'selected' : '' %>><%- value ? value : "-" %></option>
+                                <% }); %>
+                            </select>
                         </div>
                     </div>
+                </div>
+                <% }); %>
+
+                <% Object.keys(search_condition.between).forEach(function(name) { %>
+                <% var min_select = search_condition.between[name]['min'] %>
+                <% var max_select = search_condition.between[name]['max'] %>
+                <% var title = search_condition.titles[name] %>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-sm-4"><%= title %>下限</div>
+                        <div class="col-sm-8 form-inline" style="padding: 3px;">
+                            <select class="form-control big" name="<%= name %>"
+                                    id="<%= name %>" <%= (is_enable_send) ? 'readonly' : '' %>>
+                                <% min_select.forEach(function(value, key){ %>
+                                <option value="min_<%- name %>" <%= valid_condition.standard[name] == key ? 'selected' : '' %>><%- value ? value : "-" %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4"><%= title %>上限</div>
+                        <div class="col-sm-8 form-inline" style="padding: 3px;">
+                            <select class="form-control big" name="<%= name %>" id="<%= name %>"
+                                    <%= (is_enable_send) ? 'readonly' : '' %>>
+                                <% max_select.forEach(function(value, key){ %>
+                                <option value="max_<%- name %>"
+                                        <%= valid_condition.standard[name] == key ? 'selected' : '' %>
+                                        <%= (is_enable_send) ? 'readonly' : '' %>
+                                ><%- value ? value : "-" %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <% }); %>
+
+                <% Object.keys(search_condition.texts).forEach(function(name) { %>
+                <% var title = search_condition.titles[name] %>
+                <div class="row">
+                    <div class="col-sm-4"><%= title %></div>
+                    <div class="col-sm-8 form-inline" style="padding: 3px;">
+                        <input type="text" class="form-control big"
+                               name="<%= name %>" <%= (is_enable_send) ? 'readonly' : '' %>
+                               placeholder="<%= title %>" value="<%= valid_condition.like[name] %>">
+                    </div>
+                </div>
+                <% }); %>
+                <% Object.keys(search_condition.numbers).forEach(function(name) { %>
+                <% var title = search_condition.titles[name] %>
+                <div class="row">
+                    <div class="col-sm-4"><%= title %></div>
+                    <div class="col-sm-8 form-inline" style="padding: 3px;">
+                        <input type="number" class="form-control big"
+                               name="<%= name %>" <%= (is_enable_send) ? 'readonly' : '' %>
+                               placeholder="<%= title %>" value="<%= valid_condition.standard[name] %>">
+                    </div>
+                </div>
+                <% }); %>
+                <% Object.keys(search_condition.checks).forEach(function(name) { %>
+                <% var title = search_condition.titles[name] %>
+                <% if ((!is_enable_send && name === 'is_enable_send')
+                        || name !== 'is_enable_send' ) { %>
+                <div class="row">
+                    <div class="col-sm-4"><%= title %></div>
+                    <div class="col-sm-8 form-inline form-check">
+                        <input class="form-check-input" type="checkbox"
+                               value="true" <%= (is_enable_send) ? 'readonly' : '' %>
+                               name="<%= name %>" <%= valid_condition.standard[name] == 'true' ? 'checked' : '' %>/>
+                    </div>
+                </div>
                 <% } %>
-            <% }); %>
-            <% if (!is_enable_send) { %>
+                <% }); %>
+                <% if (!is_enable_send) { %>
                 <div class="row">
                     <div class="col-sm-4">昇順/降順</div>
                     <div class="col-sm-8 form-inline form-check order">
@@ -89,9 +101,17 @@
                                  name="order[]" <%= valid_sort.order == 'asc' ? 'checked' : '' %>/>
                     </div>
                 </div>
-            <% } %>
-            <div class="text-center" style="padding: 30px;">
-                <button type="submit" class="btn btn-success">送信</button>
+                <% } %>
+            </div>
+            <div class="modal-footer">
+                <div class="text-center" style="padding: 30px;">
+                    <button type="submit" class="btn btn-success">送信</button>
+                    <% if (!is_enable_send) { %>
+                    <form id="user_form" action="/admin/user/reset_search_condition" method="post">
+                        <button type="submit" class="btn">検索条件リセット</button>
+                    </form>
+                    <% } %>
+                </div>
             </div>
         </div>
     </div>

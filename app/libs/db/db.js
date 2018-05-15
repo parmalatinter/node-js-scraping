@@ -55,7 +55,7 @@ exports.delete_csv = function (req) {
         file_name = req.query.file_name;
     }
     return new Promise(function (resolve, reject) {
-        const dir = './app/public/csv/';
+        const dir = './public/csv/';
         const fs = require('fs');
 
         fs.unlink(dir + file_name, (err, res) => {

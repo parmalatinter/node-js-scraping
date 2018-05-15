@@ -13,14 +13,14 @@
 <div class="container users">
     <form id="user_form" action="/admin/user" method="post">
         <!-- Large modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal"
+        <button type="button" class="btn btn-success" data-toggle="modal"
                 data-target="#search_user">検索条件
         </button>
-        <button class="btn btn-primary" type="submit">
+        <button class="btn btn-success" type="submit">
             検索
         </button>
         <input type="hidden" name="order" id="order" value="<%=valid_sort.order%>">
-        <button type="button" id="order_button" class="btn btn-primary">
+        <button type="button" id="order_button" class="btn btn-success">
             <%=valid_sort.order == 'desc' ? '逆順にする' : '逆順をやめる'%>
         </button>
         <button type="button" class="btn btn-primary" data-toggle="modal"

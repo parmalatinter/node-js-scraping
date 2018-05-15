@@ -1,6 +1,9 @@
 <div class="modal fade" id="<%= modal_id %>" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content search_condition" style="padding: 30px 40px 30px 30px;">
+            <a href="/admin/db/to_csv" type="button" id="csv_backup_btn" class="btn btn btn-primary">
+                <span class="glyphicon glyphicon-download"></span>CSV作成
+            </a>
             <table class="table">
                 <thead>
                 <tr>
@@ -15,7 +18,8 @@
                     <td><%= r.date_str %></td>
                     <td><%= r.file_name %></td>
                     <td>
-                        <a href="/cdv/<%= r.file_name %>" download type="submit" class="btn btn-sm btn-outline">ダウンロード</a>
+                        <a href="/cdv/<%= r.file_name %>" download type="submit"
+                           class="btn btn-sm btn-outline">ダウンロード</a>
                         <form action="/admin/db/delete_csv" method="get" style="display: inline-block;">
                             <input type="hidden" name="file_name" value="<%= r.file_name %>">
                             <button type="submit" class="btn btn-sm btn-outline">削除</button>

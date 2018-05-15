@@ -39,6 +39,11 @@ db_status.get(knex).then(function () {
             const users = require('./app/controllers/admin/users');
             users.exec(req, host_res, knex);
         })
+        .get('/admin/user/reset_search_condition', function (req, host_res) {
+            req.session.serch_condition = false;
+            const users = require('./app/controllers/admin/users');
+            users.exec(req, host_res, knex);
+        })
         .get('/admin/user', function (req, host_res) {
             const users = require('./app/controllers/admin/users');
             users.exec(req, host_res, knex);
@@ -87,9 +92,9 @@ db_status.get(knex).then(function () {
             const db = require('./app/controllers/db/db');
             db.backup(req, host_res);
         })
-        .get('/admin/db/csv', function (req, host_res) {
+        .get('/admin/db/to_csv', function (req, host_res) {
             const db = require('./app/controllers/db/db');
-            db.csv(knex, req, host_res);
+            db.to_csv(knex, req, host_res);
         })
         .get('/admin/db/restore', function (req, host_res) {
             const db = require('./app/controllers/db/db');

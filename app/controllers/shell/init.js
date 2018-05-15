@@ -3,7 +3,7 @@ exports.db_init = function (config, env) {
     db.create_db(config).then(function () {
         db.create(env).then(function (e) {
             db.init(env).then(function () {
-                console.log(`データベース起動しました。 npm start --env ${env} を実施してください`);
+                console.log(`データベース初期化しました。 npm start --env ${env} を実施してください`);
             }).catch(function (e) {
                 console.log(`データベースエラー`, e);
             });

@@ -1,0 +1,9 @@
+#csv_backup_btn {
+    position: absolute;
+    left: 17px;
+    top: 15px;
+}
+
+#modal-csv .modal-content {
+    padding: 55px 40px 30px 30px !important;
+}

@@ -1,8 +1,5 @@
-# node-js-getting-started
-
-A barebones Node.js app using [Express 4](http://expressjs.com/).
-
-This application supports the [Getting Started with Node on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article - check it out.
+## Install Postgres 10.40 (set username postgres && password postgres)
+https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
 
 ## Running Locally
 
@@ -10,55 +7,13 @@ Make sure you have [Node.js](http://nodejs.org/) and the [Heroku CLI](https://cl
 
 ```sh
 $ git clone git@github.com:heroku/node-js-getting-started.git # or clone your own fork
-$ cd node-js-getting-started
+$ cd node-js-scraping
 $ npm install
-$ npm start
-```
+$ npm start　--env development or --env production
 
-Your app should now be running on [localhost:5000](http://localhost:5000/).
+log output.....
+データベース初期化しました。 npm start --env development を実施してください
 
-## Deploying to Heroku
+$ npm start　--env development or --env production
 
-```
-$ heroku create
-$ git push heroku master
-$ heroku open
-```
-or
-
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-
-## Documentation
-
-For more information about using Node.js on Heroku, see these Dev Center articles:
-
-
-
-- [Getting Started with Node.js on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs)
-- [Heroku Node.js Support](https://devcenter.heroku.com/articles/nodejs-support)
-- [Node.js on Heroku](https://devcenter.heroku.com/categories/nodejs)
-- [Best Practices for Node.js Development](https://devcenter.heroku.com/articles/node-best-practices)
-- [Using WebSockets on Heroku with Node.js](https://devcenter.heroku.com/articles/node-websockets)
-
-
-nodemon will watch the files in the directory in which nodemon was started, and if any files change, nodemon will automatically restart your node application
-
-nodemon ./server.js localhost 8080
-
-knex migrate:latest
-knex migrate:rollback
-knex migrate:make create_user
-knex seed:make users_seed knex seed:run
-
-knex seed:run
-
-sudo npm install pg-backup -g --save
-sudo npm install knex-dump --save
-sudo npm i -S sqlite3
-sudo npm install -g gzip --save
-sudo npm instal pg-copy-streams
-
-pg_ctl -D /usr/local/var/postgres start
-
-npm start --env development
-npm start --env production
+open http://localhost:5000

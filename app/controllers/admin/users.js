@@ -11,7 +11,8 @@ exports.exec = function (req, host_res, knex) {
         page = req.query.page;
     }
     const validation = require('../../validation/user');
-    const condition = req.body.sort ? req.body : req.session.serch_condition;
+    let condition = req.body.sort ? req.body : req.session.serch_condition;
+    if(!condition) condition = {is_image : 'true', is_enable_send : 'false'};
     const valid_condition = validation.search(condition);
     if (!valid_condition) {
         host_res.render('pages/error', {error: {message: '検索条件が正しく設定されておりません'}});

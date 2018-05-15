@@ -10,9 +10,9 @@ exports.backup = function (req, host_res) {
         req.app.locals.render(req, host_res, 'pages/error', {error: e});
     });
 };
-exports.csv = function (knex, req, host_res) {
+exports.to_csv = function (knex, req, host_res) {
     db.csv(knex, req).then(function (result) {
-        session_message.set_message(req, 'バックアップしました。');
+        session_message.set_message(req, 'CSVを作成しました。');
         host_res.redirect('/admin/db');
     }, function (e) {
         req.app.locals.render(req, host_res, 'pages/error', {error: e});
