@@ -1,5 +1,6 @@
 ## Install Postgres 10.40 (And set username postgres & password postgres)
 https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+https://www.pgadmin.org/download/pgadmin-3-macos/
 
 ## Running Locally
 
@@ -9,13 +10,13 @@ Make sure you have [Node.js](http://nodejs.org/) .
 $ https://github.com/parmalatinter/node-js-scraping.git # or clone your own fork
 $ cd node-js-scraping
 $ npm install
-$ SET NODE_ENV=production or NODE_ENV=development
+$ SET NODE_ENV=production or SET NODE_ENV=development
 $ npm start
 
 log output.....
-データベース初期化しました。 npm start --env development を実施してください
+データベース初期化しました。 下記コマンドを実施してください.....
 
-$ SET NODE_ENV=production or NODE_ENV=development
+$ SET NODE_ENV=production or SET NODE_ENV=development
 $ npm start
 
 log output.....
