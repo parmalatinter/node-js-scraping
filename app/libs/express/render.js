@@ -1,8 +1,9 @@
 exports.exec = function (req, host_res, path, data) {
     const setting = require('../../models/setting/setting');
-    data.message = req.session.message;
-    data.error_message = req.session.error_message;
-    data.error =  req.session.error;
+    if(!data) data = {};
+    data.message = ('message' in req.session) ? req.session.message : '';
+    data.error_message = ('message' in req.session) ? req.session.error_message : '';
+    data.error = ('error' in req.session) ? req.session.error : {};
     req.session.message = '';
     req.session.error_message = '';
     req.session.error = '';
