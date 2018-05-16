@@ -9,12 +9,14 @@ Make sure you have [Node.js](http://nodejs.org/) .
 $ https://github.com/parmalatinter/node-js-scraping.git # or clone your own fork
 $ cd node-js-scraping
 $ npm install
-$ npm start　--env development or --env production
+$ SET NODE_ENV=production or NODE_ENV=development
+$ npm start
 
 log output.....
 データベース初期化しました。 npm start --env development を実施してください
 
-$ npm start　--env development or --env production
+$ SET NODE_ENV=production or NODE_ENV=development
+$ npm start
 
 log output.....
 Listening on 5000, Open http://localhost:5000

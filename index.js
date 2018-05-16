@@ -3,7 +3,7 @@ const path = require('path');
 const PORT = process.env.PORT || 5000;
 const env = process.env.NODE_ENV || 'development';
 const puppeteer = require('puppeteer');
-const db_config = require('./app/db/config.js')[env];
+const db_config = require('./knexfile.js')[env];
 const db_status = require("./app/models/db/status");
 const render = require("./app/libs/express/render");
 const bodyParser = require('body-parser');
@@ -144,6 +144,6 @@ db_status.get(knex).then(function () {
 }).catch(function (res) {
     if (res.err) {
         const shell = require("./app/controllers/shell/init");
-        shell.db_init(config, env);
+        shell.db_init(db_config, env);
     }
 });
