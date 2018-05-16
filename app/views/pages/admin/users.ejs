@@ -223,7 +223,11 @@
                         🚓<%= r.bad_reporting_count %></td>
                     <td>
                         <%= moment(r.created_at).format("YYYY-MM-DD") %><br>
-                        <%= moment(r.registered_at).format("YYYY-MM-DD") %><br>
+                        <% if (r.sex === 2) { %><%= moment(r.registered_at).format("YYYY-MM-DD") %>
+                        <% } else { %>
+                        -
+                        <% } %>
+                        <br>
                         <% if (r.update_at) { %>
                         <%= moment(r.update_at).format("YYYY-MM-DD") %>
                         <% } else { %>
@@ -248,7 +252,7 @@
                         </div>
                     </td>
                     <td colspan="4" width="70%"><p class="collapse" id="collapse<%= i %>"
-                                                   aria-expanded="false"><%= r.about %></p>
+                                                   aria-expanded="false"><%- r.about %></p>
                         <% if (r.about.length > 198) { %>
                         <a role="button" class="collapsed" data-toggle="collapse" href="#collapse<%= i %>"
                            aria-expanded="false" aria-controls="collapse<%= i %>">
