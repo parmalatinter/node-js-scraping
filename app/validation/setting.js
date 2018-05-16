@@ -23,7 +23,7 @@ exports.setting = function (condition) {
         res.is_need_image = false;
     }
     if (('message_send_frequency_minute' in condition)) {
-        if (!validator.isInt(condition.message_send_frequency_minute, {min: 1, max: 60})) return false;
+        if (!validator.isInt(condition.message_send_frequency_minute, {min: 0, max: 60})) return false;
         res.message_send_frequency_minute = condition.message_send_frequency_minute;
     }
     return res;

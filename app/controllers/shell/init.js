@@ -30,6 +30,12 @@ exports.db_restart = function () {
             console.log(`データベースエラー`, e);
         });
     }).catch(function (e) {
-        console.log(`データベースエラー`, e);
+        db.start_db().then(function () {
+            console.log(`データベース再起動しました。 下記コマンドを実施してください`);
+            console.log(`SET NODE_ENV=production or NODE_ENV=development`);
+            console.log(`npm start`);
+        }).catch(function (e) {
+            console.log(`データベースエラー`, e);
+        });
     });
 };

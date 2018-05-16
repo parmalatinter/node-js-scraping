@@ -73,7 +73,7 @@
                 <% Object.keys(search_condition.numbers).forEach(function(name) { %>
                 <% var title = search_condition.titles[name] %>
                 <div class="row">
-                    <div class="col-sm-4"><%= title %>(指定以上)</div>
+                    <div class="col-sm-4"><%= title %><%= name !=='id' ? '(以上)' : '' %></div>
                     <div class="col-sm-8 form-inline" style="padding: 3px;">
                         <input type="number" class="form-control big"
                                name="<%= name %>" <%= (is_enable_send) ? 'readonly' : '' %>

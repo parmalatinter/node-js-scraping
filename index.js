@@ -49,7 +49,5 @@ db_status.get(knex).then(function () {
     const shell = require("./app/controllers/shell/init");
     if (res.err) {
         shell.db_init(db_config, env);
-    }else {
-        shell.db_restart();
     }
 });

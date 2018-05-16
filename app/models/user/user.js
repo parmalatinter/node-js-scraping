@@ -70,7 +70,12 @@ exports.get_list = function (knex, per_page, page, condition, sort) {
             query = query.whereBetween(name, [ condition.between[name][0], condition.between[name][1]]);
         }
         for (name of Object.keys(condition.number)) {
-            query = query.where(name, '>', condition.number[name]);
+            if(name !== 'id'){
+                query = query.where(name, '>', condition.number[name]);
+            }else {
+                query = query.where(name, condition.number[name]);
+            }
+
         }
         paginator(knex)(query, {perPage: per_page, page: page}).then(function (res) {
             resolve({data: res.data, pagination: res.pagination});

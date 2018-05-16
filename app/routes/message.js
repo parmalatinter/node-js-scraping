@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router({});
 const puppeteer = require('puppeteer');
-const send_message = require('./../controllers/scraping/send_message');
+
 
 router.post('/send', function (req) {
-    send_message.exec(req, knex, puppeteer, env);
+    const send_message = require('./../controllers/scraping/send_message');
+    send_message.exec(req, knex, puppeteer, req.app.locals.env);
 });
 
 router.post('/stop', function (req, host_res) {
+    const status = require('./../controllers/ajax/status/status');
     status.stop_send_running(knex, host_res);
 });
 
