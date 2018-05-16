@@ -20,3 +20,10 @@ log output.....
 Listening on 5000, Open http://localhost:5000
 
 open http://localhost:5000
+
+## Running Via Command Line
+via curl message send
+curl http://localhost:5000/message/send -X POST
+
+via curl info scraping
+curl http://localhost:5000/scraping/start -X POST
