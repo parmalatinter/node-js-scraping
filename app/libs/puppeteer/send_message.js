@@ -60,7 +60,7 @@ exports.exec = function (puppeteer, knex, my_user, send_obj, setting_row, env) {
 
                 await page.click("a[class=logout]");
                 await browser.close();
-                console.log("end");
+                console.log("logout success");
                 resolve(id);
             } catch (e) {
                 console.log(e.stack);
