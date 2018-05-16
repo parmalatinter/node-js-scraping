@@ -5,7 +5,6 @@ exports.seed = function(knex, Promise) {
       // Inserts seed entries
       return knex('admin_users').insert([
           {
-              "id" : 1,
               "email" : "ktoshi515226@yahoo.co.jp",
               "password" : "worksap",
               "name" : "としのり",
@@ -16,7 +15,6 @@ exports.seed = function(knex, Promise) {
               'created_at' : knex.fn.now()
           },
           {
-              "id" : 2,
               "email" : "k.toshi5152261030@gmail.com",
               "password" : "worksap",
               "name" : "makiko51",
