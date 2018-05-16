@@ -23,7 +23,7 @@ exports.restore = function (req, env) {
     const dump_path = req.app.locals.dirname + '/app/db/seeds/dump/' + file_name;
     return new Promise(function (resolve, reject) {
         let db_name = 'scraping' + (env === 'production'? '-pro' : '-dev');
-        exec('pg_restore -U postgres -c -d ' + db_name + ' ' + dump_path + ' ', function (err, stdout, stderr) {
+        exec('pg_restore -U postgres -c -d ' + db_name + ' ' + dump_path, function (err, stdout, stderr) {
             if (err) {
                 reject(err);
             }

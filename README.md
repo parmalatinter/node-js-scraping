@@ -1,6 +1,6 @@
 ## Install Postgres 10.40 (And set username postgres & password postgres)
 https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
-https://www.pgadmin.org/download/pgadmin-3-macos/ above v-1.20
+## with install pgAdmin4
 
 ## Running Locally
 

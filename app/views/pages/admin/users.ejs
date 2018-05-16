@@ -236,13 +236,15 @@
                         <div style="height: 150px;
             overflow: hidden;
             vertical-align: middle;">
-                            <% if (r.is_image) { %>
-                            <img class="img-thumbnail" width="150px" src="/img/user/user_<%= r.id %>.png">
-                            <% } else if(r.sex == 1){ %>
-                            <img class="img-thumbnail" width="150px" src="/img/default_men.png">
-                            <% } else if(r.sex == 2){ %>
-                            <img class="img-thumbnail" width="150px" src="/img/default_women.png">
-                            <% } %>
+                            <a href="https://sugardaddy.jp/profile?id=<%= r.id %>">
+                                <% if (r.is_image) { %>
+                                <img class="img-thumbnail" width="150px" src="/img/user/user_<%= r.id %>.png">
+                                <% } else if(r.sex == 1){ %>
+                                <img class="img-thumbnail" width="150px" src="/img/default_men.png">
+                                <% } else if(r.sex == 2){ %>
+                                <img class="img-thumbnail" width="150px" src="/img/default_women.png">
+                                <% } %>
+                            </a>
                         </div>
                     </td>
                     <td colspan="4" width="70%"><p class="collapse" id="collapse<%= i %>"
