@@ -29,3 +29,6 @@ curl http://localhost:5000/message/send -X POST
 
 via curl info scraping
 curl http://localhost:5000/scraping/start -X POST
+
+via curl reset db
+curl http://localhost:5000/admin/db/reset

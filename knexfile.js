@@ -10,11 +10,11 @@ module.exports = {
       host: 'localhost'
     },
     migrations: {
-      directory:'./db/migrations',
+      directory:'./app/db/migrations',
       tableName: 'knex_migrations'
     },
     seeds: {
-        directory: './db/seeds'
+        directory: './app/db/seeds'
     },
     debug: true
   },
@@ -28,11 +28,11 @@ module.exports = {
       host: 'localhost'
     },
     migrations: {
-      directory:'./db/migrations',
+      directory:'./app/db/migrations',
       tableName: 'knex_migrations'
     },
     seeds: {
-        directory: './db/seeds'
+        directory: './app/db/seeds'
     },
     debug: false
   }
