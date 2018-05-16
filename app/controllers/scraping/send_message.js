@@ -16,16 +16,41 @@ exports.start = function (req, puppeteer, knex, my_user, send_obj, setting_row, 
             function (next) {
                 message_send_status.get_running_type(knex).then(function (res) {
                     running_type = res;
+                }).catch(function (e) {
+                    throw e;
                 });
                 send_message.exec(puppeteer, knex, my_user, send_obj, setting_row, env).then(function (id) {
-                    if (!id) {
-                        running_type = message_send_status.running_type_configs.stopping;
-                        message_send_status.update_running_type(knex, running_type);
-                    } else {
+                    let target_sex = my_user.sex === 1 ? 2 : 1;
+                    if (id) {
                         user.update_sent(knex, id).then(function () {
-                            send_message.delay(setting_row.message_send_frequency_minute * 60 * sec).then(function () {
-                                next();
+
+                            let time = setting_row.message_send_frequency_minute * 60 * sec;
+                            console.log('waiting delay...........' + time + 'milli sec');
+                            send_message.delay(time + 1).then(function () {
+                                console.log('waiting finish');
+                                user.get_enable_send_list(knex, target_sex).then(function (send_list) {
+                                    if (send_list.length) {
+                                        console.log('start next');
+                                        send_obj = send_list[0];
+                                        next();
+                                    }else{
+                                        return true;
+                                    }
+                                }).catch(function (e) {
+                                    throw e;
+                                });
                             });
+                        }).catch(function (e) {
+                            throw e;
+                        });
+                    }else{
+                        user.get_enable_send_list(knex, target_sex).then(function (send_list) {
+                            if (send_list.length) {
+                                send_obj = send_list[0];
+                                next();
+                            }else{
+                                return true;
+                            }
                         }).catch(function (e) {
                             throw e;
                         });
@@ -38,7 +63,7 @@ exports.start = function (req, puppeteer, knex, my_user, send_obj, setting_row, 
                 if (e) {
                     reject(e);
                 }
-                resolve(true);session_message
+                resolve(true);
                 session_message.set_message(req, '送信完了');
             }
         );
@@ -55,17 +80,17 @@ exports.exec = function (req, knex, puppeteer, env) {
         const user_records = await admin_user.get_enable_list(knex);
 
         async.each(user_records, function (user_record, callback) {
-                let target_sex = user_record.sex === 1 ? 2 : 1;
-                user.get_enable_send_list(knex, target_sex).then(function (send_list) {
+            let target_sex = user_record.sex === 1 ? 2 : 1;
+            user.get_enable_send_list(knex, target_sex).then(function (send_list) {
                 if (!send_list.length) {
                     callback(true);
+                }else{
+                    exports.start(req, puppeteer, knex, user_record, send_list[0], setting_row, env).catch(function (e) {
+                        throw e;
+                    });
                 }
-                exports.start(req, puppeteer, knex, user_record, send_list[0], setting_row, env).then(function () {
-                    callback(true);
-                }).catch(function (e) {
-                    throw e;
-                });
-            }, function (e) {
+            })
+        }, function (e) {
                 if(e){
                     session_message.set_error_message(req, e, 'メッセージ送信エラー');
                 }else{
@@ -74,7 +99,6 @@ exports.exec = function (req, knex, puppeteer, env) {
                 console.log('message_send finished');
                 running_type = message_send_status.running_type_configs.stopping;
                 message_send_status.update_running_type(knex, running_type);
-            });
-        })
+        });
     })(req, knex, puppeteer, env);
 };
