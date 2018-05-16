@@ -12,11 +12,11 @@
     height: 80px !important;
 }
 
-.container.users td a.collapsed:after {
+.container.users td a[data-toggle="collapse"].collapsed:after {
     content: '+もっと見る';
 }
 
-.container.users td a:not(.collapsed):after {
+.container.users td a[data-toggle="collapse"]:not(.collapsed):after {
     content: '- 隠す';
 }
 
