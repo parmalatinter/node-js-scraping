@@ -1,5 +1,6 @@
 exports.set_message = function (req, message) {
     req.session.message = message;
+    req.session.save();
 };
 
 exports.set_error_message = function (req, error, message) {

@@ -1,17 +1,23 @@
-<% if (!locals.error) {
-    return
-} %>
 <div class="modal fade" id="modal_message" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <% if (locals.message) { %>
-                <h4 class="modal-title"><%= message %></h4>
-                <% } %>
-                <p class="modal-error"><%= error %></p>
-                <% if (locals.stack) { %>
-                <p class="modal-stack"><%= stack %></p>
-                <% } %>
+                <h4 class="modal-title">
+                    <% if (locals.message) { %>
+                    <%= message %>
+                    <% } %>
+                </h4>
+                <p class="modal-error">
+                    <% if (locals.error) { %>
+                    <%= error %>
+                    <% } %>
+                </p>
+                <p class="modal-stack">
+                    <% if (locals.stack) { %>
+                    <%= stack %>
+                    <% } %>
+                </p>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>

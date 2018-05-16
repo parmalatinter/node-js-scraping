@@ -1,8 +1,8 @@
 $(function () {
-    if($('#modal_message .modal-title').text()){
+    if($('#modal_message .modal-title').text().trim()){
         $('#modal_message').modal('show');
     }
-    if($('#modal_error .modal-title').text()){
+    if($('#modal_error .modal-title').text().trim()){
         $('#modal_error').modal('show');
     }
 });

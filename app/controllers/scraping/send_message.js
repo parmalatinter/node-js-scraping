@@ -99,7 +99,12 @@ exports.exec = function (req, knex, puppeteer, env) {
                 if(e instanceof Object){
                     session_message.set_error_message(req, e, 'メッセージ送信エラー');
                 }else{
-                    session_message.set_message(req, 'メッセージ送信完了');
+                    if(is_women_sent && !is_men_sent){
+                        session_message.set_message(req, '女性メッセージ送信完了');
+                    }
+                    if(!is_women_sent && is_men_sent){
+                        session_message.set_message(req, '男性メッセージ送信完了');
+                    }
                 }
                 if(is_women_sent && is_men_sent){
                     console.log('message_send finished');

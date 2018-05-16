@@ -10,13 +10,24 @@ Make sure you have [Node.js](http://nodejs.org/) .
 $ https://github.com/parmalatinter/node-js-scraping.git # or clone your own fork
 $ cd node-js-scraping
 $ npm install
+
+win
 $ SET NODE_ENV=production or SET NODE_ENV=development
+
+mac
+export NODE_ENV=production or export NODE_ENV=development
+
 $ npm start
 
 log output.....
 データベース初期化しました。 下記コマンドを実施してください.....
 
+win
 $ SET NODE_ENV=production or SET NODE_ENV=development
+
+mac
+export NODE_ENV=production or export NODE_ENV=development
+
 $ npm start
 
 log output.....
