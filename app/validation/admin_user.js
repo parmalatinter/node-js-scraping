@@ -31,7 +31,7 @@ exports.admin_user = function (condition, is_update) {
     }
     if (('is_enable' in condition)){
         if (validator.isBoolean(condition.is_enable)){
-            res.is_enable = condition.is_enable;
+            res.is_enable = condition.is_enable === "true";
         }else{
             res.is_enable = false;
         }
