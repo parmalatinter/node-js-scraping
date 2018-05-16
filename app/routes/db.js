@@ -7,7 +7,7 @@ router.get('/', function (req, host_res) {
 });
 
 router.get('/backup', function (req, host_res) {
-    db.backup(req, host_res);
+    db.backup(req, host_res, req.app.locals.env);
 });
 
 router.get('/to_csv', function (req, host_res) {
@@ -15,7 +15,7 @@ router.get('/to_csv', function (req, host_res) {
 });
 
 router.get('/restore', function (req, host_res) {
-    db.restore(req, host_res);
+    db.restore(req, host_res, req.app.locals.env);
 });
 
 router.get('/delete_backup', function (req, host_res) {
