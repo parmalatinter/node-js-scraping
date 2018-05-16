@@ -64,7 +64,6 @@ exports.start = function (req, puppeteer, knex, my_user, send_obj, setting_row, 
                     reject(e);
                 }
                 resolve(true);
-                session_message.set_message(req, '送信完了');
             }
         );
     });
@@ -91,10 +90,10 @@ exports.exec = function (req, knex, puppeteer, env) {
                 }
             })
         }, function (e) {
-                if(e){
+                if(e instanceof Object){
                     session_message.set_error_message(req, e, 'メッセージ送信エラー');
                 }else{
-                    session_message.set_message(req, 'メッセージ送信エラー');
+                    session_message.set_message(req, 'メッセージ送信完了');
                 }
                 console.log('message_send finished');
                 running_type = message_send_status.running_type_configs.stopping;
