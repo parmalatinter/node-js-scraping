@@ -140,7 +140,7 @@ db_status.get(knex).then(function () {
             const status = require('./app/controllers/ajax/status/status');
             status.stop_send_running(knex, host_res);
         })
-        .listen(PORT, () => console.log(`Listening on ${ PORT }. Open http://localhost:5000`));
+        .listen(PORT, () => console.log(`Listening on ${ PORT }  ${ env }. Open http://localhost:5000`));
 }).catch(function (res) {
     if (res.err) {
         const shell = require("./app/controllers/shell/init");
