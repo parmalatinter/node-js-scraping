@@ -30,4 +30,8 @@ router.get('/reset', function (req, host_res) {
     db.reset(req.app.locals.knex, req, host_res, req.app.locals.env);
 });
 
+router.get('/restart', function (req, host_res) {
+    db.restart(req.app.locals.knex, req, host_res, req.app.locals.env);
+});
+
 module.exports = router;

@@ -7,6 +7,7 @@ const db_status = require("./app/models/db/status");
 const render = require("./app/libs/express/render");
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const FileStore = require('session-file-store')(session);
 
 knex = require('knex')(db_config);
 
@@ -22,9 +23,10 @@ db_status.get(knex).then(function () {
         .use(bodyParser.json())
         .use(express.static('public'))
         .use(session({
+            store: new FileStore,
             secret: 'scraping-awesome',
             resave: false,
-            saveUninitialized: false,
+            saveUninitialized: true,
             cookie: {
                 maxAge: 30 * 60 * 1000
             }
@@ -34,7 +36,8 @@ db_status.get(knex).then(function () {
         .use('/admin/user', require('./app/routes/user'))
         .use('/admin/db', require('./app/routes/db'))
         .use('/admin/setting', require('./app/routes/setting'))
-        .use('/admin/scraping', require('./app/routes/scraping'))
+        .use('/scraping', require('./app/routes/scraping'))
+        .use('/message', require('./app/routes/message'))
         .use('/ajax', require('./app/routes/ajax'))
         .set('views', path.join(__dirname, './app/views'))
         .set('view engine', 'ejs')
@@ -43,8 +46,10 @@ db_status.get(knex).then(function () {
         })
         .listen(PORT, () => console.log(`Listening on ${ PORT }  ${ env }. Open http://localhost:5000`));
 }).catch(function (res) {
+    const shell = require("./app/controllers/shell/init");
     if (res.err) {
-        const shell = require("./app/controllers/shell/init");
         shell.db_init(db_config, env);
+    }else {
+        shell.db_restart();
     }
 });
