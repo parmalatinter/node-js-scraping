@@ -36,7 +36,7 @@ exports.exec = function (puppeteer, knex, my_user, send_obj, setting_row, env) {
                 console.log("start message send");
 
                 let message_path = site_config.target_path + site_config.message_board.replace("$1", send_obj.id);
-                
+
                 try {
                     await page.goto(message_path, {waitUntil: "domcontentloaded"});
                     if (!!(await page.$(".title01"))) {

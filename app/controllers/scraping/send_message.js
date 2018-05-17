@@ -40,8 +40,11 @@ exports.start = function (req, puppeteer, knex, my_user, send_obj, setting_row, 
                                                 session_message.set_message(req, '男性メッセージ送信完了');
                                                 finish_count++;
                                             }
-                                            if(finish_count > 1){
-                                                session_message.set_message(req, '全メッセージ送信完了');
+                                            if (finish_count > 1) {
+                                                session_message.set_message(req, 'メッセージ送信完了');
+                                                let running_type = message_send_status.running_type_configs.stopping;
+                                                message_send_status.update_running_type(knex, running_type);
+                                                return true;
                                             }
                                             resolve(true)
                                         }
@@ -96,6 +99,10 @@ exports.exec = function (req, knex, puppeteer, env) {
         }, function (e) {
             if (e instanceof Object) {
                 session_message.set_error_message(req, e, 'メッセージ送信エラー');
+            } else if (finish_count === 0 || finish_count === 2) {
+                if (finish_count === 0) session_message.set_message(req, '全メッセージ送信完了');
+                let running_type = message_send_status.running_type_configs.stopping;
+                message_send_status.update_running_type(knex, running_type);
             }
         });
     })(req, knex, puppeteer, env);
