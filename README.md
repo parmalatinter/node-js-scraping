@@ -50,19 +50,19 @@ curl http://localhost:5000/admin/db/reset
 Init development environment
 
 $ cd commands/init
-$ init-dev.sh
+$ sh init-dev.sh
 
 Start development
 
 $ cd commands
-$ start-dev.sh
+$ sh start-dev.sh
 
 Init production environment
 
 $ cd commands/init
-$ init-pro.sh
+$ sh init-pro.sh
 
 Start development
 
 $ cd commands
-$ start-pro.sh
+$ sh start-pro.sh
