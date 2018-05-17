@@ -25,14 +25,18 @@ exports.exec = function (puppeteer, knex, my_user, send_obj, setting_row, env) {
                     document.querySelector("input[value=ログイン]").click();
                 }, my_user);
 
-                await page.waitForNavigation();
-                await page.waitForSelector("#TOP");
+                try {
+                    await page.waitForNavigation();
+                    await page.waitForSelector("#TOP");
+                } catch (e) {
+                    await browser.close();
+                    return id;
+                }
 
                 console.log("start message send");
 
                 let message_path = site_config.target_path + site_config.message_board.replace("$1", send_obj.id);
-
-
+                
                 try {
                     await page.goto(message_path, {waitUntil: "domcontentloaded"});
                     if (!!(await page.$(".title01"))) {

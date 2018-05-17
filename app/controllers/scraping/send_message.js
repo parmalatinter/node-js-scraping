@@ -71,13 +71,10 @@ exports.start = function (req, puppeteer, knex, my_user, send_obj, setting_row, 
 
 
 exports.exec = function (req, knex, puppeteer, env) {
-    let is_men_sent = false;
-    let is_women_sent = false;
     (async (req, knex, puppeteer, env) => {
         const setting = require("../../models/setting/setting");
         const setting_row = await setting.get(knex);
         const admin_user = require('../../models/admin/user');
-        let running_type = message_send_status.running_type_configs.running;
         const user_records = await admin_user.get_enable_list(knex).catch(function (e) {
             session_message.set_error_message(req, e, '管理者取得エラー');
         });
