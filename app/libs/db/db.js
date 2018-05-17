@@ -191,7 +191,8 @@ exports.backup_list = function () {
 
         let backup_list = [];
         fs.readdir(dir, (err, files) => {
-            if(!files) resolve([]);
+            if(!files) return resolve([]);
+            if(!Array.isArray(files)) return resolve([]);
             for (let file_name of files) {
                 const timestamp = file_name.replace('dump.', '');
                 const date_str = moment.unix(timestamp).format("YYYY年MM月DD日 HH:mm:ssZ");
@@ -210,7 +211,8 @@ exports.csv_list = function () {
 
         let csv_list = [];
         fs.readdir(dir, (err, files) => {
-            if(!files) resolve([]);
+            if(!files) return resolve([]);
+            if(!Array.isArray(files)) return resolve([]);
             for (let file_name of files) {
                 const timestamp = file_name.replace('users_', '').replace('.csv', '');
                 const date_str = moment.unix(timestamp).format("YYYY年MM月DD日 HH:mm:ssZ");
