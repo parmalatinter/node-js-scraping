@@ -2,7 +2,7 @@ const async = require("async");
 const message_send_status = require('../../models/status/message_send_status');
 const user = require('../../models/user/user');
 const session_message = require('../../libs/express/session_message');
-
+let finish_count = 0;
 exports.start = function (req, puppeteer, knex, my_user, send_obj, setting_row, env) {
     const send_message = require('../../libs/puppeteer/send_message');
     let running_type = message_send_status.running_type_configs.running;
@@ -16,55 +16,55 @@ exports.start = function (req, puppeteer, knex, my_user, send_obj, setting_row, 
             function (next) {
                 message_send_status.get_running_type(knex).then(function (res) {
                     running_type = res;
-                }).catch(function (e) {
-                    throw e;
-                });
-                send_message.exec(puppeteer, knex, my_user, send_obj, setting_row, env).then(function (id) {
-                    let target_sex = my_user.sex === 1 ? 2 : 1;
-                    if (id) {
-                        user.update_sent(knex, id).then(function () {
-
-                            let time = setting_row.message_send_frequency_minute * 60 * sec;
-                            console.log('waiting delay...........' + time + 'milli sec');
-                            send_message.delay(time + 1).then(function () {
-                                console.log('waiting finish');
-                                user.get_enable_send_list(knex, target_sex).then(function (send_list) {
-                                    if (send_list.length) {
-                                        console.log('start next');
-                                        send_obj = send_list[0];
-                                        next();
-                                    }else{
-                                        return true;
-                                    }
+                    send_message.exec(puppeteer, knex, my_user, send_obj, setting_row, env)
+                        .then(function (id) {
+                            let target_sex = my_user.sex === 1 ? 2 : 1;
+                            if (id) {
+                                user.update_sent(knex, id).then(function () {
+                                    let time = setting_row.message_send_frequency_minute * 60 * sec;
+                                    console.log('waiting delay...........' + time + 'milli sec');
+                                    console.log('waiting finish');
+                                    user.get_enable_send_list(knex, target_sex).then(function (send_list) {
+                                        if (send_list.length) {
+                                            send_message.delay(time + 1).then(function () {
+                                                console.log('start next');
+                                                send_obj = send_list[0];
+                                                next();
+                                            });
+                                        } else {
+                                            if (target_sex === 1) {
+                                                session_message.set_message(req, '女性メッセージ送信完了');
+                                                finish_count++;
+                                            }
+                                            if (target_sex === 2) {
+                                                session_message.set_message(req, '男性メッセージ送信完了');
+                                                finish_count++;
+                                            }
+                                            if(finish_count > 1){
+                                                session_message.set_message(req, '全メッセージ送信完了');
+                                            }
+                                            resolve(true)
+                                        }
+                                    }).catch(function (e) {
+                                        throw e;
+                                    });
                                 }).catch(function (e) {
                                     throw e;
                                 });
-                            });
-                        }).catch(function (e) {
-                            throw e;
-                        });
-                    }else{
-                        user.get_enable_send_list(knex, target_sex).then(function (send_list) {
-                            if (send_list.length) {
-                                send_obj = send_list[0];
+                            } else {
                                 next();
-                            }else{
-                                return true;
                             }
-                        }).catch(function (e) {
+                        })
+                        .catch(function (e) {
                             throw e;
                         });
-                    }
                 }).catch(function (e) {
-                    throw e;
+                    reject(e);
                 });
             },
-            function (e) {
-                if (e) {
-                    reject(e);
-                }
-                resolve(true);
-            }
+            function (result) {
+                return result;
+            },
         );
     });
 };
@@ -79,39 +79,27 @@ exports.exec = function (req, knex, puppeteer, env) {
         const admin_user = require('../../models/admin/user');
         let running_type = message_send_status.running_type_configs.running;
         const user_records = await admin_user.get_enable_list(knex).catch(function (e) {
-            session_message.set_error_message(req, e , '管理者取得エラー');
+            session_message.set_error_message(req, e, '管理者取得エラー');
         });
-
         async.each(user_records, function (user_record, callback) {
             let target_sex = user_record.sex === 1 ? 2 : 1;
             user.get_enable_send_list(knex, target_sex).then(function (send_list) {
                 if (!send_list.length) {
-                    is_men_sent = target_sex === 1;
-                    is_women_sent = target_sex === 2;
                     callback(true);
-                }else{
-                    exports.start(req, puppeteer, knex, user_record, send_list[0], setting_row, env).catch(function (e) {
-                        throw e;
+                } else {
+                    exports.start(req, puppeteer, knex, user_record, send_list[0], setting_row, env).then(function (result) {
+                        callback(true);
+                    }).catch(function (e) {
+                        return e;
                     });
                 }
-            })
+            }).catch(function (e) {
+                return e;
+            });
         }, function (e) {
-                if(e instanceof Object){
-                    session_message.set_error_message(req, e, 'メッセージ送信エラー');
-                }else{
-                    if(is_women_sent && !is_men_sent){
-                        session_message.set_message(req, '女性メッセージ送信完了');
-                    }
-                    if(!is_women_sent && is_men_sent){
-                        session_message.set_message(req, '男性メッセージ送信完了');
-                    }
-                }
-                if(is_women_sent && is_men_sent){
-                    console.log('message_send finished');
-                    running_type = message_send_status.running_type_configs.stopping;
-                    message_send_status.update_running_type(knex, running_type);
-                }
-
+            if (e instanceof Object) {
+                session_message.set_error_message(req, e, 'メッセージ送信エラー');
+            }
         });
     })(req, knex, puppeteer, env);
 };

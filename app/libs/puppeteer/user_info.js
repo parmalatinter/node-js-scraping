@@ -67,7 +67,9 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                     await exports.delay(2000);
                     let ids = await page.evaluate(() =>
                         [...document.querySelectorAll(".BoxPhotoProfile")].map(element => Number(element.getAttribute("userid")))
-                    );
+                    ).catch(function (error) {
+                        throw error
+                    });;
                     await user.get_non_exist_ids(knex, ids, (my_user.sex === 1 ? 2 : 1)).then(function (non_exist_ids) {
                         ids = non_exist_ids;
                     }).catch(function (error) {
@@ -95,12 +97,13 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                                 let is_enable_text = await page.evaluate(() => document.querySelector(".title01").innerHTML);
                                 if (is_enable_text === 'エラー') {
                                     continue;
+                                }else if(!is_enable_text){
+                                    continue;
                                 }
                             }
                         } catch (e) {
                             continue;
                         }
-
 
                         let login_text = "";
                         if (my_user.sex === 1) {

@@ -39,21 +39,27 @@ exports.exec = function (puppeteer, knex, my_user, send_obj, setting_row, env) {
                         let is_enable_text = await page.evaluate(() => document.querySelector(".title01").innerHTML);
                         if (is_enable_text === 'エラー') {
                             await browser.close();
-                            resolve(id);
+                                return id;
                         }
                     }
                 } catch (e) {
                     await browser.close();
-                    resolve(id);
+                    return id;
                 }
 
-                await page.waitForSelector("#msg_comment");
-                if (env === 'production' || !setting_row.is_debug_mode) {
-                    await page.evaluate((my_user) => {
-                        document.querySelector("#msg_comment").value = my_user.send_message;
-                    }, my_user);
-                    await page.click("button[id=add]");
-                    await exports.delay(2000);
+                if (env === 'production' && !setting_row.is_debug_mode) {
+                    try {
+                        await page.waitForSelector("#msg_comment");
+                        if (!!(await page.$("#msg_comment"))) {
+                            await page.evaluate((my_user) => {
+                                document.querySelector("#msg_comment").value = my_user.send_message;
+                                document.querySelector("button[id=add]").click();
+                            }, my_user);
+                            exports.delay(2000);
+                        }
+                    } catch (e) {
+                        throw e;
+                    }
                 }
                 console.log("start logout");
                 await page.goto(site_config.target_path, {waitUntil: "domcontentloaded"});
@@ -61,13 +67,15 @@ exports.exec = function (puppeteer, knex, my_user, send_obj, setting_row, env) {
                 await page.click("a[class=logout]");
                 await browser.close();
                 console.log("logout success");
-                resolve(id);
+                return id;
             } catch (e) {
                 console.log(e.stack);
                 await browser.close();
                 throw e;
             }
-        })(puppeteer, my_user, setting_row, env).catch(function (e) {
+        })(puppeteer, my_user, setting_row, env).then(function (res) {
+            resolve(res);
+        }).catch(function (e) {
             reject(e);
         });
     });
