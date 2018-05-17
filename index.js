@@ -7,7 +7,6 @@ const db_status = require("./app/models/db/status");
 const render = require("./app/libs/express/render");
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const FileStore = require('session-file-store')(session);
 
 knex = require('knex')(db_config);
 
@@ -23,10 +22,9 @@ db_status.get(knex).then(function () {
         .use(bodyParser.json())
         .use(express.static('public'))
         .use(session({
-            store: new FileStore,
             secret: 'scraping-awesome',
             resave: false,
-            saveUninitialized: true,
+            saveUninitialized: false,
             cookie: {
                 maxAge: 30 * 60 * 1000
             }
