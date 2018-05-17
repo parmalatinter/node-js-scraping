@@ -1,4 +1,4 @@
-## Install Postgres 10.40 (And set username postgres & password postgres)
+﻿## Install Postgres 10.40 (And set username postgres & password postgres)
 https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
 ## with install pgAdmin4
 
@@ -44,3 +44,25 @@ curl http://localhost:5000/scraping/start -X POST
 
 via curl reset db
 curl http://localhost:5000/admin/db/reset
+
+## Running Locally from script
+
+Init development environment
+
+$ cd commands/init
+$ init-dev.sh
+
+Start development
+
+$ cd commands
+$ start-dev.sh
+
+Init production environment
+
+$ cd commands/init
+$ init-pro.sh
+
+Start development
+
+$ cd commands
+$ start-pro.sh
