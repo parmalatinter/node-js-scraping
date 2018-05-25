@@ -33,15 +33,15 @@ exports.start = function (req, puppeteer, knex, my_user, send_obj, setting_row, 
                                             });
                                         } else {
                                             if (target_sex === 1) {
-                                                session_message.set_message(req, '女性メッセージ送信完了');
-                                                finish_count++;
-                                            }
-                                            if (target_sex === 2) {
                                                 session_message.set_message(req, '男性メッセージ送信完了');
                                                 finish_count++;
                                             }
+                                            if (target_sex === 2) {
+                                                session_message.set_message(req, '女性メッセージ送信完了');
+                                                finish_count++;
+                                            }
                                             if (finish_count > 1) {
-                                                session_message.set_message(req, 'メッセージ送信完了');
+                                                session_message.set_message(req, '全メッセージ送信完了');
                                                 let running_type = message_send_status.running_type_configs.stopping;
                                                 message_send_status.update_running_type(knex, running_type);
                                                 return true;
@@ -85,6 +85,14 @@ exports.exec = function (req, knex, puppeteer, env) {
             let target_sex = user_record.sex === 1 ? 2 : 1;
             user.get_enable_send_list(knex, target_sex).then(function (send_list) {
                 if (!send_list.length) {
+                    if (target_sex === 1) {
+                        session_message.set_message(req, '男性メッセージ送信完了');
+                        finish_count++;
+                    }
+                    if (target_sex === 2) {
+                        session_message.set_message(req, '女性メッセージ送信完了');
+                        finish_count++;
+                    }
                     callback(true);
                 } else {
                     exports.start(req, puppeteer, knex, user_record, send_list[0], setting_row, env).then(function (result) {
