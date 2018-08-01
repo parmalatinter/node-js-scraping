@@ -62,7 +62,7 @@ Init production environment
 $ cd commands/init
 $ sh init-pro.sh
 
-Start development
+Start production
 
 $ cd commands
 $ sh start-pro.sh
