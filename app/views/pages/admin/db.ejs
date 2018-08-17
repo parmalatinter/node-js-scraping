@@ -26,7 +26,6 @@
         <% explain = ''%>
         <% method = 'get'%>
         <% include ../../partials/modal/comfirm.ejs %>
-
         <% modal_id = 'modal-restore' %>
         <button type="button" id="restore_btn" class="btn btn-lg btn-primary"
                 data-toggle="modal"
@@ -54,6 +53,20 @@
             <span class="glyphicon glyphicon-download"></span>CSV
         </button>
         <% include ../../partials/modal/csv.ejs %>
+        <% modal_id = 'modal-zip' %>
+        <button type="button" id="backup_btn" class="btn btn-lg btn-primary"
+                data-toggle="modal"
+                data-target="#<%= modal_id %>">
+            <span class="glyphicon glyphicon-download"></span>画像ZIPに書出
+        </button>
+        <% url = '/admin/db/image_to_zip' %>
+        <% title = 'ZIPに書き出しますか？' %>
+        <% explain = ''%>
+        <% method = 'get'%>
+        <% include ../../partials/modal/comfirm.ejs %>
+        <a class="btn btn-lg btn-primary" href="/img/users.zip" download="">
+            <span class="glyphicon glyphicon-download"></span>ユーザー画像ダウンロード
+        </a>
     </div>
 </div>
 

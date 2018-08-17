@@ -14,6 +14,10 @@ router.get('/to_csv', function (req, host_res) {
     db.to_csv(req.app.locals.knex, req, host_res);
 });
 
+router.get('/image_to_zip', function (req, host_res) {
+    db.image_to_zip(req, host_res);
+});
+
 router.get('/restore', function (req, host_res) {
     db.restore(req, host_res, req.app.locals.env);
 });
