@@ -51,7 +51,7 @@ exports.exec = function (puppeteer, knex, my_user, send_obj, setting_row, env) {
                     return id;
                 }
 
-                if (env === 'production' && !setting_row.is_debug_mode) {
+                if ((env === 'production' || env === 'heroku' ) && !setting_row.is_debug_mode) {
                     console.log("enable send");
                     try {
                         await page.waitForSelector("#msg_comment");

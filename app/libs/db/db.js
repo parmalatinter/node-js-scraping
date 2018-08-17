@@ -5,6 +5,11 @@ exports.dump = function (req, env) {
     const moment = require("moment");
     const dump_path = req.app.locals.dirname + '/app/db/seeds/dump/dump.' + moment().unix();
     return new Promise(function (resolve, reject) {
+        if(env === 'heroku'){
+            exec('heroku pg:backups:capture');
+            exec('heroku pg:backups:download');
+            resolve(true);
+        }
         let db_name = 'scraping' + (env === 'production'? '-pro' : '-dev');
         exec('pg_dump -U postgres -Fc ' + db_name + ' > ' + dump_path, function (err, stdout, stderr) {
             if (err) {
@@ -22,6 +27,10 @@ exports.restore = function (req, env) {
     }
     const dump_path = req.app.locals.dirname + '/app/db/seeds/dump/' + file_name;
     return new Promise(function (resolve, reject) {
+        if(env === 'heroku'){
+            exec('pg_restore --verbose --clean --no-acl --no-owner -h localhost -U postgres -d scraping-heroku latest.dump');
+            resolve(true);
+        }
         let db_name = 'scraping' + (env === 'production'? '-pro' : '-dev');
         exec('pg_restore -U postgres -c -d ' + db_name + ' ' + dump_path, function (err, stdout, stderr) {
             if (err) {
