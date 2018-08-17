@@ -1,5 +1,6 @@
 exports.db_init = function (config, env) {
     const db = require("./../../libs/db/db");
+    console.log(config);
     db.create_db(config).then(function () {
         db.create(env).then(function () {
             db.init(env).then(function () {
