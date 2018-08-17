@@ -8,7 +8,8 @@ exports.exec = function (puppeteer, knex, my_user, send_obj, setting_row, env) {
     const message_send_status = require('../../models/status/message_send_status');
     return new Promise(function (resolve, reject) {
         (async (puppeteer, my_user, setting_row, env) => {
-            const browser = await puppeteer.launch({headless: setting_row.is_headless_mode});
+            const LAUNCH_OPTION = process.env.DYNO ? { args: ['--no-sandbox', '--disable-setuid-sandbox'] } : {headless: setting_row.is_headless_mode};
+            const browser = await puppeteer.launch(LAUNCH_OPTION);
             try {
                 const running_type = await message_send_status.get_running_type(knex);
                 if (!running_type) {
