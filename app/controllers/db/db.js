@@ -1,6 +1,7 @@
 const session_message = require('../../libs/express/session_message');
 const output_error = require('../error/error');
 const db = require('../../libs/db/db');
+const image = require('../../libs/express/image');
 
 exports.backup = function (req, host_res, env) {
     db.dump(req, env).then(function (result) {
@@ -19,6 +20,15 @@ exports.to_csv = function (knex, req, host_res) {
     });
 };
 
+exports.image_to_zip = function (req, host_res) {
+    image.image_to_zip().then(function (result) {
+        session_message.set_message(req, 'ZIPを書き出しました。');
+        host_res.redirect('/admin/db');
+    }, function (e) {
+        req.app.locals.render(req, host_res, 'pages/error', {error: e});
+    });
+};
+
 exports.backup_list = async function (req, host_res) {
     let backup_list = await db.backup_list();
     let csv_list = await db.csv_list();
@@ -27,7 +37,7 @@ exports.backup_list = async function (req, host_res) {
 
 exports.delete_backup = function (req, host_res) {
     db.delete_backup(req).then(function (result) {
-        session_message.set_message(req, '削除しました。');
+        session_mege.set_message(req, '削除しました。');
         host_res.redirect('/admin/db');
     }, function (e) {
         req.app.locals.render(req, host_res, 'pages/error', {error: e});
