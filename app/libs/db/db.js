@@ -108,7 +108,7 @@ exports.csv = function (knex, req) {
 };
 
 
-exports.create_db = async function (config) {
+exports.create_db = async function (config, env) {
     return new Promise(function (resolve, reject) {
         if(env === 'heroku'){
             resolve(true);
