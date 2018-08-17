@@ -1,7 +1,7 @@
 exports.db_init = function (config, env) {
     const db = require("./../../libs/db/db");
     console.log(config);
-    db.create_db(config).then(function () {
+    db.create_db(config, env).then(function () {
         db.create(env).then(function () {
             db.init(env).then(function () {
                 console.log(`データベース初期化しました。下記コマンドを実施してください`);
@@ -14,7 +14,7 @@ exports.db_init = function (config, env) {
             console.log(`データベースエラー`, e);
         });
     }).catch(function (e) {
-        console.log(`データベースエラー`, e);
+        console.log(`ログ`, e);
         console.log(`データベース起動しました。 下記コマンドを実施してください`);
         console.log(`SET NODE_ENV=production or NODE_ENV=development`);
         console.log(`npm start`);
