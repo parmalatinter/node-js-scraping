@@ -110,6 +110,9 @@ exports.csv = function (knex, req) {
 
 exports.create_db = async function (config) {
     return new Promise(function (resolve, reject) {
+        if(env === 'heroku'){
+            resolve(true);
+        }
         const pgtools = require('pgtools');
         pgtools.createdb({
             user: config.connection.user,
