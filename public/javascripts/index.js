@@ -124,10 +124,10 @@ let get_info_all_count = function () {
         dataType: 'json'
     }).done(function (res) {
         if (res.men_count) {
-            $("#info_men_count").text('スクレイピング 女性人数 : ' + res.men_count + '人');
+            $("#info_men_count").text('スクレイピング 男性人数 : ' + res.men_count + '人');
         }
         if (res.woman_count) {
-            $("#info_woman_count").text('スクレイピング 男性人数 : ' + res.woman_count + '人');
+            $("#info_woman_count").text('スクレイピング 女性人数 : ' + res.woman_count + '人');
         }
     }).fail(function (xhr, status, error) {
         console.log(xhr, status, error);
@@ -142,10 +142,10 @@ let get_send_all_count = function () {
         dataType: 'json'
     }).done(function (res) {
         if (res.men_count) {
-            $("#send_men_count").text('メッセージ送信 女性人数 : ' + res.men_count + '人');
+            $("#send_men_count").text('メッセージ送信 男性人数 : ' + res.men_count + '人');
         }
         if (res.woman_count) {
-            $("#send_woman_count").text('メッセージ送信 男性人数 : ' + res.woman_count + '人');
+            $("#send_woman_count").text('メッセージ送信 女性人数 : ' + res.woman_count + '人');
         }
     }).fail(function (xhr, status, error) {
         console.log(xhr, status, error);
