@@ -52,18 +52,22 @@ exports.exec = function (puppeteer, knex, my_user, send_obj, setting_row, env) {
                 }
 
                 if (env === 'production' && !setting_row.is_debug_mode) {
+                    console.log("enable send");
                     try {
                         await page.waitForSelector("#msg_comment");
                         if (!!(await page.$("#msg_comment"))) {
+                            exports.delay(2000);
                             await page.evaluate((my_user) => {
                                 document.querySelector("#msg_comment").value = my_user.send_message;
+                                exports.delay(1000);
                                 document.querySelector("button[id=add]").click();
                             }, my_user);
-                            exports.delay(2000);
                         }
                     } catch (e) {
                         throw e;
                     }
+                }else{
+                    console.log("disable send");
                 }
                 console.log("start logout");
                 await page.goto(site_config.target_path, {waitUntil: "domcontentloaded"});
