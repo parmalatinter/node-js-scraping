@@ -14,6 +14,7 @@ exports.db_init = function (config, env) {
             console.log(`データベースエラー`, e);
         });
     }).catch(function (e) {
+        console.log(`データベースエラー`, e);
         console.log(`データベース起動しました。 下記コマンドを実施してください`);
         console.log(`SET NODE_ENV=production or NODE_ENV=development`);
         console.log(`npm start`);
