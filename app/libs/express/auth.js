@@ -14,6 +14,7 @@ module.exports = function (req, host_res, next) {
             return next();
         }
     }).catch(function (err) {
-        reject(err);
+        console.log(err);
+        return host_res.status(401).send();
     });
 };
