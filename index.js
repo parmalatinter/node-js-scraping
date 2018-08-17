@@ -43,7 +43,7 @@ db_status.get(knex).then(function () {
         .set('view engine', 'ejs')
         .get('/', function (req, host_res) {
             req.app.locals.render(req, host_res, 'pages/index');
-        })
+        });
     app.listen(PORT, () => console.log(`Listening on ${ PORT }  ${ env }. Open http://localhost:5000`));
 }).catch(function (res) {
     const shell = require("./app/controllers/shell/init");
