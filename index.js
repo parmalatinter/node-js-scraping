@@ -29,7 +29,9 @@ db_status.get(knex).then(function () {
                 maxAge: 30 * 60 * 1000
             }
         }))
-        .use(express.static(path.join(__dirname, 'public')))
+        .use(express.static(path.join(__dirname, 'public')));
+    const auth = require('./app/libs/express/auth');
+    app.use(auth)
         .use('/admin/admin_user', require('./app/routes/admin_user'))
         .use('/admin/user', require('./app/routes/user'))
         .use('/admin/db', require('./app/routes/db'))
@@ -42,7 +44,7 @@ db_status.get(knex).then(function () {
         .get('/', function (req, host_res) {
             req.app.locals.render(req, host_res, 'pages/index');
         })
-        .listen(PORT, () => console.log(`Listening on ${ PORT }  ${ env }. Open http://localhost:5000`));
+    app.listen(PORT, () => console.log(`Listening on ${ PORT }  ${ env }. Open http://localhost:5000`));
 }).catch(function (res) {
     const shell = require("./app/controllers/shell/init");
     if (res.err) {
