@@ -64,12 +64,12 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                 console.log("start get user ids");
                 let limit = env === 'development' || setting_row.is_debug_mode ? 100 : 100000;
                 while (page_number < limit) {
-                    await exports.delay(2000);
-                    let ids = await page.evaluate(() =>
-                        [...document.querySelectorAll(".BoxPhotoProfile")].map(element => Number(element.getAttribute("userid")))
-                    ).catch(function (error) {
-                        throw error
-                    });;
+
+                    await exports.delay(3000);
+                    var ids = await page.evaluate((selector) => {
+                        const list = Array.from(document.querySelectorAll(selector));
+                        return list.map(data => data.getAttribute("userid"));
+                    }, '.BoxPhotoProfile');
                     await user.get_non_exist_ids(knex, ids, (my_user.sex === 1 ? 2 : 1)).then(function (non_exist_ids) {
                         ids = non_exist_ids;
                     }).catch(function (error) {
@@ -81,6 +81,7 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
 
                     console.log("start get user info");
                     for (let id of ids) {
+                        console.log('user info:' + id);
                         var running_type = await scraping_user_info_status.get_running_type(knex);
                         if (!running_type) {
                             limit = 0;
