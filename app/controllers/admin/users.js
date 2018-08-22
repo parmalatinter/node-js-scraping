@@ -28,7 +28,8 @@ exports.exec = function (req, host_res, knex) {
             moment: moment,
             search_condition: search_condition,
             valid_condition: validation.search(condition),
-            valid_sort: valid_sort
+            valid_sort: valid_sort,
+            is_heroku: process.env.DYNO? true : false
         })
     }, function (e) {
         host_res.render('pages/error', {error: e});

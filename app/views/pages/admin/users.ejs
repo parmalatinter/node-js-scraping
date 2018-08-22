@@ -241,7 +241,9 @@
             overflow: hidden;
             vertical-align: middle;">
                             <a target="_blank" href="https://sugardaddy.jp/profile?id=<%= r.id %>">
-                                <% if (r.is_image) { %>
+                                <% if (is_heroku) { %>
+                                <img class="img-thumbnail" width="150px" src="<%= r.image_url %>">
+                                <% } else if(r.is_image) { %>
                                 <img class="img-thumbnail" width="150px" src="/img/user/user_<%= r.id %>.png">
                                 <% } else if(r.sex == 1){ %>
                                 <img class="img-thumbnail" width="150px" src="/img/default_men.png">

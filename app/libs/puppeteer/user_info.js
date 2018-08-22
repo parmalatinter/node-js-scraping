@@ -4,7 +4,7 @@ exports.delay = function (timeout) {
     });
 };
 
-exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
+exports.exec = function (puppeteer, knex, my_user, setting_row, env, cloudinary) {
     const moment = require("moment");
     const user = require("../../models/user/user");
     const scraping_user_info_status = require('../../models/status/scraping_user_info_status');
@@ -133,10 +133,17 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env) {
                             if (setting_row.is_need_image) {
                                 if (!!(await page.$(".rect.slide1 > img"))) {
                                     const image = await page.$('.rect.slide1 > img');
+                                    let path = 'public/img/user/user_' + id + '.png';
                                     await image.screenshot({
-                                        path: 'public/img/user/user_' + id + '.png'
+                                        path: path
                                     });
                                     target_user.is_image = true;
+
+                                    if (process.env.DYNO){
+                                        cloudinary.uploader.upload(path, function(result) { 
+                                            target_user.image_url = result.secure_url;
+                                        });
+                                    }
                                 }
                             }
                         } catch (e) {
