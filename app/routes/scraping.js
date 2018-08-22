@@ -5,7 +5,7 @@ const users_info = require('./../controllers/scraping/users_info');
 
 router.post('/start', function (req) {
     const users_info = require('./../controllers/scraping/users_info');
-    users_info.exec(req, req.app.locals.knex, puppeteer, req.app.locals.env);
+    users_info.exec(req, req.app.locals.knex, puppeteer, req.app.locals.env, req.app.locals.cloudinary);
 });
 
 router.post('/stop', function (req, host_res) {
