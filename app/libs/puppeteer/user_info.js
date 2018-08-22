@@ -148,7 +148,7 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env, cloudinary)
                                 }
                             }
                         } catch (e) {
-                            console.log("image faild");
+                            console.log("image faild: ", e);
                         }
 
                         if (my_user.sex === 1) {
