@@ -139,12 +139,19 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env, cloudinary)
                                     });
                                     target_user.is_image = true;
 
-                                    if (process.env.DYNO){
-                                        cloudinary.uploader.upload(path, function(result) { 
-                                            target_user.image_url = result.secure_url;
-                                            console.log("uploaded image: ", result);
+                                    function upload_image() {
+                                        return new Promise((resolve, reject) => {
+                                            if (!process.env.DYNO){
+                                                resolve();
+                                            }
+                                            cloudinary.uploader.upload(path, function(result) {
+                                                target_user.image_url = result.url;
+                                                console.log("uploaded image: ", result.url);
+                                                resolve();
+                                            });
                                         });
                                     }
+                                    await upload_image();
                                 }
                             }
                         } catch (e) {
