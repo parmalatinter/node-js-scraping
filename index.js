@@ -7,6 +7,13 @@ const db_status = require("./app/models/db/status");
 const render = require("./app/libs/express/render");
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const cloudinary = require('cloudinary');
+
+cloudinary.config({ 
+  cloud_name: 'hd3lnafya', 
+  api_key: '686359141139713', 
+  api_secret: 'v4Hl9N28aSMHf5p-W0KdPSgC3fQ' 
+});
 
 knex = require('knex')(db_config);
 
@@ -15,6 +22,7 @@ db_status.get(knex).then(function () {
     app.locals.dirname = path.join(__dirname, '');
     app.locals.render = render.exec;
     app.locals.knex = knex;
+    app.locals.cloudinary = cloudinary;
     app.locals.env = env;
 
     app

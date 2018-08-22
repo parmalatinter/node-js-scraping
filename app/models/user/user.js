@@ -192,7 +192,8 @@ exports.update = function (knex, user_obj) {
                         message_count: user_obj.message_count, //メッセージ人数
                         bbs_count: user_obj.bbs_count,//掲示板投稿数
                         bad_reporting_count: user_obj.bad_reporting_count,//被通報数
-                        update_at: knex.fn.now() //更新日時
+                        update_at: knex.fn.now(), //更新日時
+                        image_url: user_obj.image_url ? user_obj.image_url : '' //画像
                     }).catch(function (err) {
                     throw(err);
                 });
