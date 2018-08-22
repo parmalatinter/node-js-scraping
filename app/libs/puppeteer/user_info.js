@@ -141,8 +141,8 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env, cloudinary)
 
                                     if (process.env.DYNO){
                                         cloudinary.uploader.upload(path, function(result) { 
-                                            target_user.image_url = result.secure_url;
-                                            console.log("uploaded image: ", result);
+                                            target_user.image_url = path;
+                                            console.log("uploaded image: ", path);
                                         });
                                     }
                                 }
