@@ -172,6 +172,7 @@ exports.update = function (knex, user_obj) {
                         throw(err)
                     });
             } else {
+                console.log('new user: ', user_obj);
                 knex("users").where("id", user_obj.id)
                     .update({
                         name: user_obj.name, //ニックネーム
