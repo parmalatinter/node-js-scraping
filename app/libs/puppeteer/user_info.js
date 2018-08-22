@@ -242,7 +242,7 @@ exports.exec = function (puppeteer, knex, my_user, setting_row, env, cloudinary)
                 console.log(e.stack);
                 throw e;
             }
-        })(puppeteer, knex, my_user, setting_row, env).catch(function (e) {
+        })(puppeteer, knex, my_user, setting_row, env, cloudinary).catch(function (e) {
             reject(e);
         });
     });
