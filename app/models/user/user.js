@@ -25,7 +25,8 @@ exports.get_empty_user = function () {
         is_sent: false, //メッセージ送信フラグ
         is_image: false, //画像取得フラグ
         created_at: 0, //登録日時
-        registered_at: 0 //登録日時
+        registered_at: 0, //登録日時
+        image_url: "" //画像
     };
 };
 
@@ -172,6 +173,7 @@ exports.update = function (knex, user_obj) {
                         throw(err)
                     });
             } else {
+                console.log('new user: ', user_obj);
                 knex("users").where("id", user_obj.id)
                     .update({
                         name: user_obj.name, //ニックネーム
