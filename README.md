@@ -66,3 +66,11 @@ Start production
 
 $ cd commands
 $ sh start-pro.sh
+
+# heroku project pipelines
+
+https://dashboard.heroku.com/pipelines/f6910477-adc1-4cb9-840d-b4f7f4ee5065
+
+# heroku app
+
+https://daddy-scraping.herokuapp.com/
